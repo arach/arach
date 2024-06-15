@@ -1,5 +1,6 @@
-## Hi there, I'm Arach 👋
+#### <sub>Hi there, I'm Arach 👋</sub>
 
-- 🔭 I’m currently working on personal projects in SF
-- 🤖 I’ve been hacking on AI agents and automations
-- 📫 How to reach me: [@arach on X](https://x.com/arach) or [@arach on LinkedIn](https://linkedin.com/in/arach)
+- <sub>📍 Currently hanging out in SF </sub>
+- <sub>💻 Working on personal projects </sub>
+- <sub>🤖 I’ve been interested in AI + engineering</sub>
+- <sub>📫 Reach me at [@arach on X](https://x.com/arach) or [@arach on LinkedIn](https://linkedin.com/in/arach)</sub>
