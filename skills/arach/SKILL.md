@@ -1,11 +1,11 @@
 ---
 name: arach
-description: Personal meta-skill for Arash Tchoupani. Use this as the entry point to understand arach's projects, conventions, and available skills. Activates on "arach's projects", "what does arach work on", or when working in any arach/* repo.
+description: Personal meta-skill for Arach. Use this as the entry point to understand arach's projects, conventions, and available skills. Activates on "arach's projects", "what does arach work on", or when working in any arach/* repo.
 ---
 
 # arach
 
-Personal skill index for Arash Tchoupani (@arach). This is the entry point for understanding my projects, conventions, and how to work with my codebase.
+Personal skill index for Arach (@arach). This is the entry point for understanding my projects, conventions, and how to work with my codebase.
 
 ## Conventions
 
@@ -33,9 +33,8 @@ Personal skill index for Arash Tchoupani (@arach). This is the entry point for u
 | Project | Description | Path |
 |---------|-------------|------|
 | **Talkie** | Voice conversation app | `~/dev/talkie` |
-| **Grab** | Menu bar capture app | `~/dev/grab` |
-| **Breathe** | Breathing exercise app | `~/dev/Breathe` |
 | **Scout** | Audio transcription | `~/dev/scout` |
+| **Speakeasy** | Voice assistant | `~/dev/speakeasy` |
 | **Pomo** | Pomodoro timer | `~/dev/pomo` |
 | **Tempo** | Time tracking | `~/dev/tempo` |
 
@@ -54,8 +53,6 @@ Personal skill index for Arash Tchoupani (@arach). This is the entry point for u
 |---------|-------------|------|
 | **agentloop** | Agent loop primitives | `~/dev/agentloop` |
 | **fabric** | UI framework experiments | `~/dev/fabric` |
-| **factory** | Code generation | `~/dev/factory` |
-| **blink** | Fast interactions | `~/dev/blink` |
 
 ## Installing Skills
 
@@ -79,7 +76,6 @@ When I mention or you detect I'm working in:
 | `~/dev/arc` or "architecture diagram" | Load arc-diagrams skill |
 | `~/dev/dewey` or "documentation" | Load dewey-docs skill |
 | `~/dev/talkie` or "voice app" | Swift/SwiftUI macOS app context |
-| `~/dev/grab` or "capture app" | Swift menu bar app context |
 | Any `~/dev/*` project | Check for local CLAUDE.md first |
 
 ## Tech Stack Preferences
@@ -122,7 +118,7 @@ git commit -m "🔧 Update configuration"
 ├── arc/            # Architecture diagrams [has skill]
 ├── dewey/          # Documentation toolkit [has skill]
 ├── talkie/         # Voice conversation app
-├── grab/           # Menu bar capture app
+├── speakeasy/      # Voice assistant
 ├── arach.dev/      # Personal website
 ├── ...             # ~100 other projects
 ```
@@ -142,4 +138,5 @@ npx skills add arach/arach
 
 - GitHub: [github.com/arach](https://github.com/arach)
 - Site: [arach.dev](https://arach.dev)
-- Twitter: [@arasharani](https://twitter.com/arasharani)
+- X: [@arach](https://x.com/arach)
+- Site: [arach.io](https://arach.io)
