@@ -43,7 +43,7 @@ function showHelp(): void {
 }
 
 function showVersion(): void {
-  console.log("arach 0.0.1");
+  console.log("arach 0.0.2");
 }
 
 async function main(): Promise<void> {

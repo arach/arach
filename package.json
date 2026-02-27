@@ -1,6 +1,6 @@
 {
   "name": "@arach/arach",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "npx arach — who is Arach Tchoupani?",
   "type": "module",
   "bin": {

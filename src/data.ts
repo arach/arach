@@ -104,9 +104,35 @@ export let agents: Agent[] = [
 export let remotePortrait: string | null = null;
 export let motd: string | null = null;
 
+/** Normalize remote bio to CLI format (API may serve different shapes). */
+function normalizeBio(raw: any): Bio {
+  const b = { ...bio };
+  if (raw.name) b.name = raw.name;
+  if (raw.location) b.location = raw.location;
+
+  // summary: string → string[]
+  if (typeof raw.summary === "string") {
+    b.summary = raw.summary.split(/(?<=\.)\s+/);
+  } else if (Array.isArray(raw.summary)) {
+    b.summary = raw.summary;
+  }
+
+  // stats: object { years, ventures, ... } → [{ key, val }]
+  if (raw.stats && !Array.isArray(raw.stats)) {
+    b.stats = Object.entries(raw.stats).map(([key, val]) => ({
+      key,
+      val: String(val),
+    }));
+  } else if (Array.isArray(raw.stats)) {
+    b.stats = raw.stats;
+  }
+
+  return b;
+}
+
 /** Hydrate the store with remote data. Partial updates are fine — only truthy keys overwrite. */
 export function hydrate(remote: Partial<CardData>): void {
-  if (remote.bio) bio = remote.bio;
+  if (remote.bio) bio = normalizeBio(remote.bio);
   if (remote.career?.length) career = remote.career;
   if (remote.projects?.length) projects = remote.projects;
   if (remote.tech?.length) tech = remote.tech;
