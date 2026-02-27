@@ -1,0 +1,36 @@
+{
+  "name": "arach",
+  "version": "0.0.1",
+  "description": "npx arach — who is Arach Tchoupani?",
+  "type": "module",
+  "bin": {
+    "arach": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "arach",
+    "cli",
+    "card",
+    "portfolio",
+    "npx"
+  ],
+  "author": "Arach Tchoupani <arach@tchoupani.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arach/arach"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}
