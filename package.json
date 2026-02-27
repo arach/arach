@@ -1,5 +1,5 @@
 {
-  "name": "arach",
+  "name": "@arach/arach",
   "version": "0.0.1",
   "description": "npx arach — who is Arach Tchoupani?",
   "type": "module",
