@@ -31,8 +31,6 @@ export function showProjects(): void {
   });
 
   lines.push(blank());
-  lines.push(dimLine("  15+ projects at https://arach.dev"));
-  lines.push(blank());
   lines.push(separator());
 
   print(lines);
