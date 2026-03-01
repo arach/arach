@@ -6,11 +6,12 @@ import { showStack } from "./commands/stack.js";
 import { showAccounts } from "./commands/accounts.js";
 import { showSites } from "./commands/sites.js";
 import { showAgents } from "./commands/agents.js";
+import { showInbox } from "./commands/inbox.js";
 import { hydrate, hasData } from "./data.js";
 import { fetchCardData, ping } from "./remote.js";
 import { c } from "./colors.js";
 
-const commands: Record<string, () => void> = {
+const commands: Record<string, () => void | Promise<void>> = {
   projects: showProjects,
   stack: showStack,
   accounts: showAccounts,
@@ -30,6 +31,7 @@ function showHelp(): void {
     `    ${c.cyan}npx @arach/arach accounts${c.reset}     Social links`,
     `    ${c.cyan}npx @arach/arach sites${c.reset}        Web properties`,
     `    ${c.cyan}npx @arach/arach agents${c.reset}       AI agent writing & experiments`,
+    `    ${c.cyan}npx @arach/arach inbox${c.reset}        Check your agent inbox`,
     "",
     `  ${c.bold}Options:${c.reset}`,
     `    ${c.cyan}--help${c.reset}, ${c.cyan}-h${c.reset}            Show this help`,
@@ -57,6 +59,17 @@ async function main(): Promise<void> {
   if (values.help) return showHelp();
   if (values.version) return showVersion();
 
+  const sub = positionals[0];
+
+  // inbox short-circuits — no card data needed
+  if (sub === "inbox") {
+    ping("run", { command: "inbox" });
+    console.log();
+    await showInbox();
+    console.log();
+    return;
+  }
+
   // Fetch data from arach.io
   const remote = await fetchCardData();
   if (remote) {
@@ -69,14 +82,13 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const sub = positionals[0];
   ping("run", { command: sub || "card" });
 
   if (sub) {
     const cmd = commands[sub];
     if (cmd) {
       console.log();
-      cmd();
+      await cmd();
       console.log();
     } else {
       console.error(`Unknown command: ${sub}\n`);
