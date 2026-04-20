@@ -3,7 +3,7 @@
 > Who is Arach Tchoupani?
 
 ```
-$ npx arach
+$ npx @arach/arach
 ```
 
 Engineer, founder, builder. San Francisco / Montreal.
@@ -12,13 +12,12 @@ Engineer, founder, builder. San Francisco / Montreal.
 #### Commands
 
 ```
-npx arach              # Full introduction card
-npx arach projects     # Featured projects
-npx arach stack        # Tech stack
-npx arach accounts     # Social links
-npx arach sites        # Web properties
-npx arach agents       # AI agent writing & experiments
-npx arach --help       # Usage info
+npx @arach/arach projects     # Featured projects
+npx @arach/arach stack        # Tech stack
+npx @arach/arach accounts     # Social links
+npx @arach/arach sites        # Web properties
+npx @arach/arach agents       # AI agent writing & experiments
+npx @arach/arach --help       # Usage info
 ```
 
 #### Links
