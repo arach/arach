@@ -112,6 +112,34 @@ If something looks wrong in the project, fix the source input and re-sync — **
 
 **Known upstream noise — do NOT chase per-project.** `check_design_system` flags Tailwind `--tw-*` engine internals as "unclassified tokens" / wants `@kind` comments. These are **advisory** (they do not block design iteration), regenerate on every sync, and are a design-sync **tooling** limitation — not fixable in the repo or the project. Ignore them, or raise with the design-sync maintainers.
 
+### Design Iteration Loop
+
+Use when pushing a visual surface (component, screen, theme, landing page) toward a *better* result. The loop is **ideate → scope → execute → judge → decide**, repeated until it clears the bar or hits diminishing returns. Opus drives; sub-agents fan out only when scope warrants it.
+
+**Frame it first — no loop without these:**
+- `goal`: what "better" means here, in one or two concrete sentences.
+- `rubric`: the explicit heuristics the judge scores against — visual hierarchy, spacing rhythm, contrast/legibility, brand-token adherence, restraint (complexity cost), on-goal. **A written rubric is mandatory — without it you're judging by vibe.**
+- `render`: how to *see* each result rendered — judge pixels, never the diff alone. (Arc: `/capture/:id` or `scripts/preview.mjs`; design-sync: the preview `.html`; generic: a Playwright screenshot.)
+- `budget`: max rounds / agents / time before you stop.
+
+**0 · Ideate (Opus, inline).** Look at the current render. Propose **2–4 candidate directions**, each with a one-line rationale tied to `goal`. Self-judge against `rubric` and keep only the **few that are genuinely promising** — kill the rest now, cheaply.
+
+**1 · Scope → inline vs. fan-out (heuristics).**
+- **Iterate inline** when: one clear direction, small/local blast radius, or the candidates are variations on a single surface. Opus edits directly.
+- **Fan out sub-agents** when: 2+ *independent* directions worth exploring in parallel, a large surface, or you want diverse attempts to compare. One agent per direction.
+- Tie-breakers: directions touching the same files → serialize or isolate in a git **worktree**; tight budget → inline the single best guess; "I want to compare" → fan out.
+
+**2 · Execute.** Each direction is built to a **reviewable render** (screenshot / preview), not just code.
+
+**3 · Judge — independently.** Score each render against `rubric`. Prefer an **independent judge** over self-grading: a fresh sub-agent given only the rubric + renders, or route through the [Scout Review Loop](#scout-review-loop) for an outside pass. Cross-check brand-token adherence against the real tokens.
+
+**4 · Decide.**
+- **Ship** the winner — or **synthesize**: take the best direction and graft the strongest ideas from the runners-up.
+- **Iterate**: feed the judge's critique into one more round on the winner / merged direction.
+- **Stop** when it clears the bar, when no candidate beats the current best for **2 rounds** (diminishing returns), or the budget is spent.
+
+**Run it deterministically.** For the fan-out case the Workflow tool models this exactly — a judge-panel over N directions with a loop-until-good gate: generate → parallel execute → parallel judge (independent lenses) → synthesize → decide, bounded by `budget`. Reach for it when the design space is wide and comparable attempts beat one-attempt-iterated.
+
 ## New Project Defaults
 
 Every new project follows this core compounding skeleton:
