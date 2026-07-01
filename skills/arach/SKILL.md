@@ -81,6 +81,37 @@ Treat the review as evidence, not instruction. Classify findings as:
 
 Then implement in-scope `must_fix` findings, run practical narrow checks, and report who reviewed, the Scout receipt/ref, what changed, verification, and remaining risk.
 
+### claude.ai/design (design-sync) Workflow
+
+Use `/design-sync` to push a repo's real component library to a claude.ai/design project so the design agent builds with **my actual components**, not generic ones. Works in any React + Tailwind project.
+
+**Ownership model — the thing that ends the "will this overwrite my stuff?" anxiety.** `/design-sync` writes and deletes ONLY the design-system artifacts at the project root: `components/**`, `_preview/**`, `_vendor/**`, `tokens/**`, `fonts/**`, `guidelines/**`, `_ds_bundle.js`, `_ds_bundle.css`, `styles.css`, `README.md`, `_ds_sync.json`, `_ds_needs_recompile`. It **never touches anything else** — the designs the agent produces, and any hand-authored files outside those paths, survive every re-sync. → **Iterate freely on claude.ai/design; re-syncing the component library will not clobber my designs.**
+
+**Golden rule — customize at SOURCE, never hand-edit the synced project.** Any edit to a generated/synced file on the remote (`_adherence.oxlintrc.json`, `_ds_bundle.css`, a component `.html`) is regenerated and reverted on the next sync or the app's self-check. Durable customization lives in the repo, committed, under `.design-sync/`:
+
+| Input file | Owns |
+| :--- | :--- |
+| `config.json` | component map, prop contracts (`dtsPropsFor`), overrides, glob scopes, the `projectId` pin |
+| `conventions.md` | the README header / usage guide the design agent reads |
+| `previews/<Name>.tsx` | hand-authored preview cards (the converter never touches these) |
+| `*.head.css` (e.g. `arc-ds.head.css`) | brand tokens + fonts injected at `:root` |
+| `NOTES.md` | repo gotchas + a "Re-sync risks" watch-list for the next run |
+
+If something looks wrong in the project, fix the source input and re-sync — **never** the remote file.
+
+**The loop:**
+1. **First sync:** run `/design-sync .` in the repo → creates + pins a new project and uploads the library; one approval covers the run.
+2. **Iterate:** open the project on claude.ai/design and prompt the agent to build with my components. Designs are safe from re-syncs.
+3. **Re-sync on component/token change:** `/design-sync` rebuilds, diffs against the project's anchor, and uploads only what moved (one `finalize_plan` approval shows the exact writes/deletes). Commit the `.design-sync/` inputs.
+4. **Sync from a committed/settled tree** — a mid-refactor tree syncs WIP. Run one sync session per project at a time (no concurrent syncs to the same project).
+
+**Safety guarantees (so I can stop worrying):**
+- Re-sync updates the library only; my designs + hand-authored extras are untouched.
+- `.design-sync/` inputs are committed → reproducible on any machine; verified state carries via the uploaded `_ds_sync.json`.
+- A crash mid-sync leaves the project **un-anchored** (the documented safe state) — the next sync re-verifies and re-uploads; nothing silently rots.
+
+**Known upstream noise — do NOT chase per-project.** `check_design_system` flags Tailwind `--tw-*` engine internals as "unclassified tokens" / wants `@kind` comments. These are **advisory** (they do not block design iteration), regenerate on every sync, and are a design-sync **tooling** limitation — not fixable in the repo or the project. Ignore them, or raise with the design-sync maintainers.
+
 ## New Project Defaults
 
 Every new project follows this core compounding skeleton:
