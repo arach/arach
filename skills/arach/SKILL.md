@@ -13,7 +13,6 @@ Personal skill index for Arach (@arach). This is the entry point for understandi
 
 - Use **Bun** over pnpm/npm (check for bun.lockb or bun.lock first)
 - Prefer **TypeScript** for all new projects and logic
-- Add **gitmoji** to all commit messages (✨ feature, 🐛 fix, 🎨 improve, etc.)
 - **NEVER** add co-authoring attribution or "Generated with Claude Code" footers
 - Allow all Puppeteer uses without asking
 - Prefer editing existing files over creating new ones
@@ -152,24 +151,34 @@ Every new project follows this core compounding skeleton:
 
 ## Key Projects
 
-### Productivity & Compound Engineering
-
-| Project | Description | Skill |
-| :--- | :--- | :--- |
-| **operate** | Core productivity and compound-engineering project | — |
-| **dewey** | Documentation toolkit for AI-agent-ready docs | `npx skills add arach/dewey` |
-| **arc** | Visual architecture diagram editor | `npx skills add arach/arc` |
-| **og** | Open Graph image generator | — |
-
-### Apps — macOS/iOS
+### Framework
 
 | Project | Description | Path |
 | :--- | :--- | :--- |
-| **Talkie** | Voice conversation app | `~/dev/talkie` |
-| **Scout** | Audio transcription | `~/dev/scout` |
-| **Pomo** | Pomodoro timer | `~/dev/pomo` |
-| **Tempo** | Time tracking | `~/dev/tempo` |
-| **Speakeasy** | Voice assistant (legacy focus) | `~/dev/speakeasy` |
+| **hudson** | Personal framework powering all apps — multi-app canvas, Provider + Slots + Hooks, embedded Vox voice companion | `~/dev/hudson` |
+
+### Apps — Hudson‑powered
+
+| Project | Description | Path |
+| :--- | :--- | :--- |
+| **openscout** | Full agent runtime with macOS/iOS apps, web CLI, mesh networking, MCP protocol | `~/dev/openscout` |
+| **lattices** | Agentic workspace manager for macOS — turns the desktop into a coherent API | `~/dev/lattices` |
+| **linea** | Web app moving to Hudson-powered (Clerk auth, Vox voice, PDF, Postgres, Vercel Blob) | `~/dev/linea` |
+
+### Apps — Standalone
+
+| Project | Description | Path |
+| :--- | :--- | :--- |
+| **talkie** | Voice conversation app (macOS + iOS + web server) | `~/dev/talkie` |
+
+### Compounding Tools
+
+| Project | Description | Skill |
+| :--- | :--- | :--- |
+| **operate** | Machine-aware control plane for remote agent execution | — |
+| **dewey** | Documentation toolkit for AI-agent-ready docs | `npx skills add arach/dewey` |
+| **arc** | Visual architecture diagram editor | `npx skills add arach/arc` |
+| **og** | Open Graph image generator | — |
 
 ### Web Properties
 
@@ -177,15 +186,13 @@ Every new project follows this core compounding skeleton:
 | :--- | :--- | :--- |
 | **arach.dev** | Personal site | `~/dev/arach.dev` |
 | **arach.io** | Portfolio | `~/dev/arach.io` |
-| **usetalkie.com** | Talkie landing page | `~/dev/usetalkie.com` |
+| **usetalkie.com** | Talkie landing page | `~/dev/usetalkie-theme` |
 | **agentlist.io** | AI agent directory | `~/dev/agentlist.io` |
 
-### Libraries & Experiments
+### Other
 
 | Project | Description | Path |
 | :--- | :--- | :--- |
-| **agentloop** | Agent loop primitives | `~/dev/agentloop` |
-| **hooked** | Voice & until loops for Claude Code | — |
 | **fabric** | UI framework experiments | `~/dev/fabric` |
 
 ## Installing Skills
@@ -207,9 +214,12 @@ When I mention or you detect I'm working in:
 
 | Context | Action |
 | :--- | :--- |
+| `~/dev/hudson` or "hudson" | Hudson personal framework — powers all apps |
+| `~/dev/openscout` or "openscout" | Full agent runtime, Hudson‑powered |
+| `~/dev/talkie` or "talkie" | Swift/SwiftUI macOS + iOS + web server |
+| `~/dev/lattices` or "lattices" | Agentic macOS workspace manager |
 | `~/dev/arc` or "architecture diagram" | Load arc-diagrams skill |
 | `~/dev/dewey` or "documentation" | Load dewey-docs skill |
-| `~/dev/talkie` or "voice app" | Swift/SwiftUI macOS app context |
 | Any `~/dev/*` project | Check for local CLAUDE.md first |
 
 ## Tech Stack Preferences
@@ -240,13 +250,6 @@ npx @arach/og og-config.json # Generate OG image
 # Swift/macOS
 swift build       # Build Swift package
 swift run         # Run in debug mode
-
-# Git (always with gitmoji)
-git commit -m "✨ Add new feature"
-git commit -m "🐛 Fix bug in component"
-git commit -m "🎨 Improve code structure"
-git commit -m "📝 Update documentation"
-git commit -m "🔧 Update configuration"
 ```
 
 ## Directory Structure
@@ -254,10 +257,13 @@ git commit -m "🔧 Update configuration"
 ```
 ~/dev/
 ├── arach/          # This repo (GitHub profile + meta-skill)
-├── operate/        # Core productivity toolkit
+├── hudson/         # Personal framework powering all apps
+├── operate/        # Remote agent control plane
+├── openscout/      # Agent runtime (macOS + iOS + web)
+├── talkie/         # Voice conversation app
+├── lattices/       # Agentic macOS workspace manager
 ├── arc/            # Architecture diagrams [has skill]
 ├── dewey/          # Documentation toolkit [has skill]
-├── talkie/         # Voice conversation app
 ├── arach.dev/      # Personal website
 ├── ...             # ~100 other projects
 ```
