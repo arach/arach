@@ -1,0 +1,33 @@
+name: Validate skills
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/validate-skills.yml"
+      - "README.md"
+      - "package.json"
+      - "scripts/validate-skills.ts"
+      - "skills/**"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/validate-skills.yml"
+      - "README.md"
+      - "package.json"
+      - "scripts/validate-skills.ts"
+      - "skills/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+      - run: bun run validate:skills
+      - run: bun run build
+      - run: unzip -t skills/arach.zip
+      - run: npx --yes skills@1.5.20 add . --list

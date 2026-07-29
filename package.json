@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "validate:skills": "bun scripts/validate-skills.ts"
   },
   "engines": {
     "node": ">=18"

@@ -8,13 +8,6 @@ description: |
   attributions, em dash overuse, rule of three, AI vocabulary, negative
   parallelisms, binary contrasts, dramatic fragmentation, and more.
   Supports voice presets: crisp, warm, expert, story.
-allowed-tools:
-  - Read
-  - Write
-  - Edit
-  - Grep
-  - Glob
-  - AskUserQuestion
 ---
 
 # Humanizer
