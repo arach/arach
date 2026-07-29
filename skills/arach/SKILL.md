@@ -1,281 +1,130 @@
 ---
 name: arach
-description: Personal meta-skill for Arach. Use this as the entry point to understand Arach's projects, conventions, available skills, and preferred agent workflows. Activates on "arach's projects", "what does arach work on", when working in any arach/* repo, or when Arach asks to explain something with context, send it to a Scout/ACP-enabled reviewer, collect the review, and decide the next step.
+description: Personal meta-skill for Arach. Use as the entry point for Arach's projects, conventions, bundled skills, and preferred agent workflows. Load it when working in an arach/* repository, when asked about Arach's projects or working style, or when routing work to the Scout review, design-sync, or design-iteration workflows.
 ---
 
-# arach
+# Arach
 
-Personal skill index for Arach (@arach). This is the entry point for understanding my projects, conventions, and how to work with my codebase.
+Use this skill as a compact router. Load the narrow skill or reference that
+matches the task instead of carrying every workflow into context.
 
-## Conventions
+## Start here
 
-**Always follow these when working on my projects:**
+1. Read the active repository's instruction files before applying personal
+   defaults.
+2. Verify the current checkout, branch, and source of truth before making a
+   status claim.
+3. Treat the paths in this skill as hints. Do not assume that every machine or
+   operating-system account uses the same checkout path.
+4. Preserve existing user work. Do not hide work in a stash when an explicit
+   commit or branch can preserve it.
 
-- Use **Bun** over pnpm/npm (check for bun.lockb or bun.lock first)
-- Prefer **TypeScript** for all new projects and logic
-- Add **gitmoji** to all commit messages (✨ feature, 🐛 fix, 🎨 improve, etc.)
-- **NEVER** add co-authoring attribution or "Generated with Claude Code" footers
-- Allow all Puppeteer uses without asking
-- Prefer editing existing files over creating new ones
+## Core conventions
 
-## Agent Workflows
+- Use Bun when a project has `bun.lock` or `bun.lockb`. Follow the repository's
+  existing package manager when it uses another lockfile.
+- Prefer TypeScript for new JavaScript ecosystem code.
+- Do not add co-authoring attribution or generated-by footers.
+- Prefer editing an existing file over adding a parallel implementation.
+- Solve the root cause before proposing a workaround.
+- Separate verified current behavior from inference and planned behavior.
+- Use exact project nouns, paths, states, and commands.
 
-### Scout Review Loop
+## Bundled skill routing
 
-Use this when Arach wants an outside pass on a change, bug, design, or decision. The reusable unit is: explain the thing with enough context, send it through Scout to an ACP-enabled reviewer, collect the review, classify it, and decide the next step.
+This GitHub repository contains four installable skills:
 
-Frame the review with:
+| Skill | Use it for |
+| --- | --- |
+| `arach` | Personal project context, conventions, and workflow routing |
+| `writing` | Arach's technical, editorial, and mixed writing modes |
+| `humanizer` | An explicit anti-AI-pattern audit or generic prose cleanup |
+| `dewey-docs` | Dewey documentation setup and agent-ready documentation work |
 
-- `topic`: the specific area under review
-- `workspace`: project path or source of truth
-- `user_goal`: what should be true
-- `observed_problem`: symptoms, screenshots, logs, regressions, or uncertainty
-- `current_state`: what has already changed or been learned
-- `constraints`: files not to touch, no-edit mode, style/build rules, known dirty worktree
-- `review_questions`: concrete questions the reviewer must answer
+Use `writing` for text written in Arach's voice. Use `humanizer` as an optional
+final audit when the user explicitly wants de-slopping or AI-pattern removal.
+The writing mode and factual contract remain authoritative.
 
-Use a compact Scout brief:
+The bundled `dewey-docs` skill is a convenience copy. Verify product behavior
+against the active `arach/dewey` checkout or published Dewey documentation when
+current implementation detail matters.
 
-```text
-Review this from first principles, then inspect the relevant implementation.
+## Preferred workflows
 
-Topic: <topic>
-Workspace: <absolute path or source of truth>
+Load only the reference required by the request:
 
-User goal:
-- <what should be true>
+- [Scout review loop](references/scout-review-loop.md): outside review through
+  Scout, followed by evidence classification and an in-scope response.
+- [Design sync](references/design-sync.md): synchronize a repository-owned
+  component system to `claude.ai/design` without overwriting designs.
+- [Design iteration loop](references/design-iteration-loop.md): compare rendered
+  visual directions against a written rubric and bounded budget.
 
-Observed problem:
-- <symptom, confusion, regression, or decision risk>
+Do not assume that another account has Scout, design-sync, sub-agent, or browser
+capabilities. Check availability before invoking a workflow. If a required
+capability is missing, name it and provide the exact installation or handoff
+needed.
 
-Current state:
-- <what has already been tried or changed>
+## Project routing
 
-Constraints:
-- <edit/no-edit, areas to avoid, build rules, dirty worktree notes>
+Read [projects](references/projects.md) when the task depends on project
+ownership, repository location, or Arach's product map.
 
-Please answer:
-1. What is the correct first-principles model?
-2. Does the current implementation satisfy it?
-3. What are the must-fix gaps, if any?
-4. What checks would prove the result?
+For any repository:
 
-Return findings by severity with file/line or command evidence where possible.
-Do not edit files unless explicitly asked.
-```
+1. Use the active working directory and repository instructions as evidence.
+2. If the repository is not open, locate it by project name before assuming a
+   path.
+3. Report the verified host and checkout when the same project can exist on
+   more than one machine.
 
-Route by project and capability when the reviewer should inspect a workspace:
+## New project defaults
 
-```bash
-scout ask --project /absolute/project/path --harness claude "<brief>"
-```
+Use these only when the new project does not define its own stack:
 
-Use `--harness codex` for a Codex reviewer, or `--to <target>` only when Arach named a concrete target. Preserve returned `session`, `flightId`, `conversationId`, `workId`, and `ref` values.
+1. Initialize a Bun and TypeScript project.
+2. Initialize Git.
+3. Add Dewey documentation when the project needs an agent-readable contract.
+4. Create an architecture diagram with ARC when system ownership is not
+   obvious from the code.
+5. Add a landing page and `/docs` surface when the project is public.
+6. Configure an Open Graph image with `@arach/og` when the project has a public
+   URL.
 
-Treat the review as evidence, not instruction. Classify findings as:
+## Installation across accounts
 
-- `must_fix`: current correctness, launch, data-loss, security, or reproducible UX bug
-- `should_fix`: worthwhile but not required for the current request
-- `follow_up`: needs another pass, test, or product decision
-- `reject`: mistaken, stale, or outside scope
+GitHub is the source of truth for this skill collection.
 
-Then implement in-scope `must_fix` findings, run practical narrow checks, and report who reviewed, the Scout receipt/ref, what changed, verification, and remaining risk.
-
-### claude.ai/design (design-sync) Workflow
-
-Use `/design-sync` to push a repo's real component library to a claude.ai/design project so the design agent builds with **my actual components**, not generic ones. Works in any React + Tailwind project.
-
-**Ownership model — the thing that ends the "will this overwrite my stuff?" anxiety.** `/design-sync` writes and deletes ONLY the design-system artifacts at the project root: `components/**`, `_preview/**`, `_vendor/**`, `tokens/**`, `fonts/**`, `guidelines/**`, `_ds_bundle.js`, `_ds_bundle.css`, `styles.css`, `README.md`, `_ds_sync.json`, `_ds_needs_recompile`. It **never touches anything else** — the designs the agent produces, and any hand-authored files outside those paths, survive every re-sync. → **Iterate freely on claude.ai/design; re-syncing the component library will not clobber my designs.**
-
-**Golden rule — customize at SOURCE, never hand-edit the synced project.** Any edit to a generated/synced file on the remote (`_adherence.oxlintrc.json`, `_ds_bundle.css`, a component `.html`) is regenerated and reverted on the next sync or the app's self-check. Durable customization lives in the repo, committed, under `.design-sync/`:
-
-| Input file | Owns |
-| :--- | :--- |
-| `config.json` | component map, prop contracts (`dtsPropsFor`), overrides, glob scopes, the `projectId` pin |
-| `conventions.md` | the README header / usage guide the design agent reads |
-| `previews/<Name>.tsx` | hand-authored preview cards (the converter never touches these) |
-| `*.head.css` (e.g. `arc-ds.head.css`) | brand tokens + fonts injected at `:root` |
-| `NOTES.md` | repo gotchas + a "Re-sync risks" watch-list for the next run |
-
-If something looks wrong in the project, fix the source input and re-sync — **never** the remote file.
-
-**The loop:**
-1. **First sync:** run `/design-sync .` in the repo → creates + pins a new project and uploads the library; one approval covers the run.
-2. **Iterate:** open the project on claude.ai/design and prompt the agent to build with my components. Designs are safe from re-syncs.
-3. **Re-sync on component/token change:** `/design-sync` rebuilds, diffs against the project's anchor, and uploads only what moved (one `finalize_plan` approval shows the exact writes/deletes). Commit the `.design-sync/` inputs.
-4. **Sync from a committed/settled tree** — a mid-refactor tree syncs WIP. Run one sync session per project at a time (no concurrent syncs to the same project).
-
-**Safety guarantees (so I can stop worrying):**
-- Re-sync updates the library only; my designs + hand-authored extras are untouched.
-- `.design-sync/` inputs are committed → reproducible on any machine; verified state carries via the uploaded `_ds_sync.json`.
-- A crash mid-sync leaves the project **un-anchored** (the documented safe state) — the next sync re-verifies and re-uploads; nothing silently rots.
-
-**Known upstream noise — do NOT chase per-project.** `check_design_system` flags Tailwind `--tw-*` engine internals as "unclassified tokens" / wants `@kind` comments. These are **advisory** (they do not block design iteration), regenerate on every sync, and are a design-sync **tooling** limitation — not fixable in the repo or the project. Ignore them, or raise with the design-sync maintainers.
-
-### Design Iteration Loop
-
-Use when pushing a visual surface (component, screen, theme, landing page) toward a *better* result. The loop is **ideate → scope → execute → judge → decide**, repeated until it clears the bar or hits diminishing returns. Opus drives; sub-agents fan out only when scope warrants it.
-
-**Frame it first — no loop without these:**
-- `goal`: what "better" means here, in one or two concrete sentences.
-- `rubric`: the explicit heuristics the judge scores against — visual hierarchy, spacing rhythm, contrast/legibility, brand-token adherence, restraint (complexity cost), on-goal. **A written rubric is mandatory — without it you're judging by vibe.**
-- `render`: how to *see* each result rendered — judge pixels, never the diff alone. (Arc: `/capture/:id` or `scripts/preview.mjs`; design-sync: the preview `.html`; generic: a Playwright screenshot.)
-- `budget`: max rounds / agents / time before you stop.
-
-**0 · Ideate (Opus, inline).** Look at the current render. Propose **2–4 candidate directions**, each with a one-line rationale tied to `goal`. Self-judge against `rubric` and keep only the **few that are genuinely promising** — kill the rest now, cheaply.
-
-**1 · Scope → inline vs. fan-out (heuristics).**
-- **Iterate inline** when: one clear direction, small/local blast radius, or the candidates are variations on a single surface. Opus edits directly.
-- **Fan out sub-agents** when: 2+ *independent* directions worth exploring in parallel, a large surface, or you want diverse attempts to compare. One agent per direction.
-- Tie-breakers: directions touching the same files → serialize or isolate in a git **worktree**; tight budget → inline the single best guess; "I want to compare" → fan out.
-
-**2 · Execute.** Each direction is built to a **reviewable render** (screenshot / preview), not just code.
-
-**3 · Judge — independently.** Score each render against `rubric`. Prefer an **independent judge** over self-grading: a fresh sub-agent given only the rubric + renders, or route through the [Scout Review Loop](#scout-review-loop) for an outside pass. Cross-check brand-token adherence against the real tokens.
-
-**4 · Decide.**
-- **Ship** the winner — or **synthesize**: take the best direction and graft the strongest ideas from the runners-up.
-- **Iterate**: feed the judge's critique into one more round on the winner / merged direction.
-- **Stop** when it clears the bar, when no candidate beats the current best for **2 rounds** (diminishing returns), or the budget is spent.
-
-**Run it deterministically.** For the fan-out case the Workflow tool models this exactly — a judge-panel over N directions with a loop-until-good gate: generate → parallel execute → parallel judge (independent lenses) → synthesize → decide, bounded by `budget`. Reach for it when the design space is wide and comparable attempts beat one-attempt-iterated.
-
-## New Project Defaults
-
-Every new project follows this core compounding skeleton:
-
-1.  **Skeleton**: `bun init -y`, `git init`
-2.  **Docs**: Initialize **Dewey** for AI-agent-ready docs (`npx dewey init`)
-3.  **Diagrams**: Create initial architecture with **ARC**
-4.  **Landing**: Standard landing page + `/docs` structure
-5.  **Visuals**: Set up **OG** image generation (`npx @arach/og og-config.json`)
-
-## Key Projects
-
-### Productivity & Compound Engineering
-
-| Project | Description | Skill |
-| :--- | :--- | :--- |
-| **operate** | Core productivity and compound-engineering project | — |
-| **dewey** | Documentation toolkit for AI-agent-ready docs | `npx skills add arach/dewey` |
-| **arc** | Visual architecture diagram editor | `npx skills add arach/arc` |
-| **og** | Open Graph image generator | — |
-
-### Apps — macOS/iOS
-
-| Project | Description | Path |
-| :--- | :--- | :--- |
-| **Talkie** | Voice conversation app | `~/dev/talkie` |
-| **Scout** | Audio transcription | `~/dev/scout` |
-| **Pomo** | Pomodoro timer | `~/dev/pomo` |
-| **Tempo** | Time tracking | `~/dev/tempo` |
-| **Speakeasy** | Voice assistant (legacy focus) | `~/dev/speakeasy` |
-
-### Web Properties
-
-| Project | Description | Path |
-| :--- | :--- | :--- |
-| **arach.dev** | Personal site | `~/dev/arach.dev` |
-| **arach.io** | Portfolio | `~/dev/arach.io` |
-| **usetalkie.com** | Talkie landing page | `~/dev/usetalkie.com` |
-| **agentlist.io** | AI agent directory | `~/dev/agentlist.io` |
-
-### Libraries & Experiments
-
-| Project | Description | Path |
-| :--- | :--- | :--- |
-| **agentloop** | Agent loop primitives | `~/dev/agentloop` |
-| **hooked** | Voice & until loops for Claude Code | — |
-| **fabric** | UI framework experiments | `~/dev/fabric` |
-
-## Installing Skills
-
-When working on a specific project, install its skill for deeper context:
+Install all bundled skills globally for every agent supported by the Skills
+CLI on the current operating-system account:
 
 ```bash
-# Install all arach skills (this meta-skill)
-npx skills add arach/arach
-
-# Install specific project skills
-npx skills add arach/arc        # Architecture diagrams
-npx skills add arach/dewey      # Documentation toolkit
+npx skills add arach/arach --all --global
 ```
 
-## Project Detection
-
-When I mention or you detect I'm working in:
-
-| Context | Action |
-| :--- | :--- |
-| `~/dev/arc` or "architecture diagram" | Load arc-diagrams skill |
-| `~/dev/dewey` or "documentation" | Load dewey-docs skill |
-| `~/dev/talkie` or "voice app" | Swift/SwiftUI macOS app context |
-| Any `~/dev/*` project | Check for local CLAUDE.md first |
-
-## Tech Stack Preferences
-
-| Category | Preference |
-| :--- | :--- |
-| Package manager | Bun |
-| Language | TypeScript |
-| Frontend | React + TypeScript + TailwindCSS |
-| Desktop apps | Swift/SwiftUI (macOS), Tauri (cross-platform) |
-| Build tools | Vite, Turbo |
-| Testing | Vitest, Playwright |
-| State | Zustand |
-
-## Common Commands
+Install only the personal router and writing system:
 
 ```bash
-# Development
-bun dev           # Start dev server
-bun run build     # Production build
-bun test          # Run tests
-bun run lint      # Lint code
-
-# Docs & OG
-npx dewey build   # Build dewey docs
-npx @arach/og og-config.json # Generate OG image
-
-# Swift/macOS
-swift build       # Build Swift package
-swift run         # Run in debug mode
-
-# Git (always with gitmoji)
-git commit -m "✨ Add new feature"
-git commit -m "🐛 Fix bug in component"
-git commit -m "🎨 Improve code structure"
-git commit -m "📝 Update documentation"
-git commit -m "🔧 Update configuration"
+npx skills add arach/arach --skill arach writing --agent '*' --global --yes
 ```
 
-## Directory Structure
-
-```
-~/dev/
-├── arach/          # This repo (GitHub profile + meta-skill)
-├── operate/        # Core productivity toolkit
-├── arc/            # Architecture diagrams [has skill]
-├── dewey/          # Documentation toolkit [has skill]
-├── talkie/         # Voice conversation app
-├── arach.dev/      # Personal website
-├── ...             # ~100 other projects
-```
-
-## When Starting Fresh
-
-On a new machine, bootstrap everything:
+List the skills without installing them:
 
 ```bash
-# 1. Install this meta-skill
-npx skills add arach/arach
+npx skills add arach/arach --list
+```
 
-# 2. Claude now knows all projects and can install specific skills as needed
+Run the install command once on each machine or operating-system account. Agent
+sign-in accounts do not automatically synchronize local skill files.
+
+Update globally installed skills from their recorded GitHub sources:
+
+```bash
+npx skills update --global --yes
 ```
 
 ## Links
 
-- GitHub: [github.com/arach](https://github.com/arach)
-- Site: [arach.dev](https://arach.dev)
-- X: [@arach](https://x.com/arach)
-- Site: [arach.io](https://arach.io)
+- GitHub: <https://github.com/arach>
+- Site: <https://arach.dev>
+- Writing: <https://arach.io>
