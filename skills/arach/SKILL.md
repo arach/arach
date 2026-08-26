@@ -49,6 +49,15 @@ The bundled `dewey-docs` skill is a convenience copy. Verify product behavior
 against the active `arach/dewey` checkout or published Dewey documentation when
 current implementation detail matters.
 
+## Workshop tooling
+
+`vmops` operates our exe.dev workshop VMs — create/delete VMs, service
+status, logs, and one-command studio deploys. It is intentionally not an
+installable skill: the script lives in the studio checkout at
+`~/dev/studio/bin/vmops.mjs` (run it with Bun). Load it when the task is
+putting things up on exe.dev, checking VM services, or syncing studios.
+Full contract: `docs/cloud-studios.md` and `AGENTS.md` in the studio repo.
+
 ## Preferred workflows
 
 Load only the reference required by the request:
