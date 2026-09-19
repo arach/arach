@@ -23,7 +23,8 @@ Terminal and Herdr chrome. Black field, gold metal, ivory text.
 | Red | `#c45c4a` | error / ANSI 1 |
 | Green | `#8a9a62` | ok / ANSI 2 |
 
-Text is ivory, not gold. Gold is the accent only.
+Text is ivory, not gold. Gold is the cursor and thin accents only.
+ANSI yellow is dark bronze (`#5c4e28`) so TUIs cannot fill a pane with metal.
 
 ## Type
 
