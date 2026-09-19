@@ -1,6 +1,14 @@
 import { c } from "../colors.js";
 import { blank, heading, prompt, print } from "../render.js";
 import { applyGhosttyTheme } from "../ghostty/apply.js";
+import {
+  findGhosttyFlavor,
+  ghosttyFlavors,
+} from "../ghostty/flavors.js";
+import {
+  installGhosttyFlavor,
+  openGhosttyFlavor,
+} from "../ghostty/install-flavor.js";
 import { renderPreview } from "../ghostty/preview.js";
 import {
   defaultGhosttyTheme,
@@ -9,18 +17,30 @@ import {
 } from "../ghostty/themes.js";
 
 function usage(): string[] {
+  const flavorNames = ghosttyFlavors.map((f) => f.id).join(", ");
   return [
     prompt("ghostty"),
     blank(),
     heading("GHOSTTY"),
     blank(),
-    `  ${c.cyan}arach ghostty${c.reset}                    Preview all three variants`,
+    `  ${c.cyan}arach ghostty${c.reset}                    Preview theme variants`,
     `  ${c.cyan}arach ghostty preview${c.reset} [name]    Preview void, lacquer, or brass`,
-    `  ${c.cyan}arach ghostty apply${c.reset} <name>      Write theme + point Ghostty/Herdr at it`,
+    `  ${c.cyan}arach ghostty apply${c.reset} <name>      Write the palette into ~/.config/ghostty`,
+    `  ${c.cyan}arach ghostty flavors${c.reset}           Named Ghostty apps (tint + theme + Herdr)`,
+    `  ${c.cyan}arach ghostty install${c.reset} [name]    Build ~/Applications/dev/<Name> Ghost.app`,
+    `  ${c.cyan}arach ghostty open${c.reset} <name>       Open that named app`,
     blank(),
-    `  ${c.dim}variants:${c.reset} ${ghosttyThemes.map((t) => t.name).join(", ")}  ${c.dim}(default apply: ${defaultGhosttyTheme.name})${c.reset}`,
-    `  ${c.dim}reload Ghostty with cmd+shift+, — opacity needs a full quit${c.reset}`,
+    `  ${c.dim}themes:${c.reset} ${ghosttyThemes.map((t) => t.name).join(", ")}  ${c.dim}(default apply: ${defaultGhosttyTheme.name})${c.reset}`,
+    `  ${c.dim}flavors:${c.reset} ${flavorNames}`,
+    `  ${c.dim}still Ghostty — each flavor is a named, tinted wrapper${c.reset}`,
   ];
+}
+
+function flavorLines(): string[] {
+  return ghosttyFlavors.map((flavor) => {
+    const tint = `${flavor.iconGhost} on ${flavor.iconScreen}`;
+    return `  ${c.bold}${flavor.id.padEnd(10)}${c.reset}${flavor.name.padEnd(16)} ${c.dim}${flavor.themeName} · ${flavor.herdrSession} · ${tint}${c.reset}`;
+  });
 }
 
 export async function runGhostty(args: string[]): Promise<void> {
@@ -63,8 +83,85 @@ export async function runGhostty(args: string[]): Promise<void> {
     return;
   }
 
+  if (action === "flavors" || action === "flavor") {
+    print([
+      prompt("ghostty flavors"),
+      blank(),
+      heading("FLAVORS"),
+      blank(),
+      ...flavorLines(),
+      blank(),
+      `  ${c.dim}arach ghostty install talkie${c.reset}`,
+      `  ${c.dim}arach ghostty open lattices${c.reset}`,
+    ]);
+    return;
+  }
+
+  if (action === "install") {
+    const selected = name
+      ? [findGhosttyFlavor(name)]
+      : ghosttyFlavors.map((f) => f);
+    if (name && !selected[0]) {
+      console.error(`Unknown flavor: ${name}`);
+      print(usage());
+      process.exitCode = 1;
+      return;
+    }
+    const lines = [
+      prompt("ghostty install"),
+      blank(),
+      heading("FLAVORS"),
+      blank(),
+    ];
+    for (const flavor of selected) {
+      if (!flavor) continue;
+      const paths = await installGhosttyFlavor(flavor);
+      lines.push(
+        `  ${c.bold}${flavor.name}${c.reset}  ${c.dim}${flavor.summary}${c.reset}`
+      );
+      lines.push(`  ${c.dim}${paths.app}${c.reset}`);
+      lines.push(`  ${c.dim}${paths.config}${c.reset}`);
+      lines.push(blank());
+    }
+    lines.push(
+      `  ${c.dim}first launch: right-click the app → Open if macOS blocks the new bundle id${c.reset}`
+    );
+    print(lines);
+    return;
+  }
+
+  if (action === "open") {
+    const flavor = findGhosttyFlavor(name ?? "");
+    if (!flavor) {
+      console.error(`Unknown flavor: ${name ?? ""}`);
+      print(usage());
+      process.exitCode = 1;
+      return;
+    }
+    await installGhosttyFlavor(flavor);
+    openGhosttyFlavor(flavor);
+    print([
+      prompt("ghostty open"),
+      blank(),
+      `  opened ${c.bold}${flavor.name}${c.reset}  ${c.dim}${flavor.summary}${c.reset}`,
+    ]);
+    return;
+  }
+
   if (action === "help" || action === "--help" || action === "-h") {
     print(usage());
+    return;
+  }
+
+  const implied = findGhosttyFlavor(action);
+  if (implied && !name) {
+    await installGhosttyFlavor(implied);
+    openGhosttyFlavor(implied);
+    print([
+      prompt(`ghostty ${implied.id}`),
+      blank(),
+      `  opened ${c.bold}${implied.name}${c.reset}  ${c.dim}${implied.summary}${c.reset}`,
+    ]);
     return;
   }
 

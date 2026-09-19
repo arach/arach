@@ -79,7 +79,7 @@ npx @arach/arach stack        # Tech stack
 npx @arach/arach accounts     # Social links
 npx @arach/arach sites        # Web properties
 npx @arach/arach agents       # Agent writing and experiments
-npx @arach/arach ghostty      # Black-gold Ghostty themes (preview / apply)
+npx @arach/arach ghostty      # Ghostty themes and named flavors
 npx @arach/arach --help       # Usage information
 ```
 

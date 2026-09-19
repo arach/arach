@@ -58,6 +58,9 @@ Lacquer is the default. Text stays ivory; gold is accent.
 npx @arach/arach ghostty                 # preview all three
 npx @arach/arach ghostty preview lacquer
 npx @arach/arach ghostty apply lacquer
+npx @arach/arach ghostty flavors         # named Ghostty apps
+npx @arach/arach ghostty install         # Talkie Ghost + Lattices Ghost
+npx @arach/arach ghostty open talkie
 ```
 
-Apply writes `~/.config/ghostty/themes/black-gold-*` and points Ghostty + Herdr at the named variant. Reload Ghostty with `cmd+shift+,`.
+Apply writes `~/.config/ghostty/themes/black-gold-*`. Flavors are still Ghostty: a named wrapper, a tinted macOS icon, a theme, and a Herdr session. They land in `~/Applications/dev/`.

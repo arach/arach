@@ -6,6 +6,9 @@ Ghostty + Herdr use **black-gold** with three variants: **void**, **lacquer**, *
 npx @arach/arach ghostty                 # preview all three
 npx @arach/arach ghostty preview lacquer
 npx @arach/arach ghostty apply lacquer   # default landed look
+npx @arach/arach ghostty install         # named, tinted Ghostty apps
+npx @arach/arach ghostty open talkie     # Talkie Ghost (gold lacquer)
+npx @arach/arach ghostty open lattices   # Lattices Ghost (zinc void)
 ```
 
 `apply` writes the three Ghostty theme files, sets `theme = black-gold-<variant>`, and overlays Herdr `theme.custom`. Reload Ghostty with `cmd+shift+,`. Opacity and blur need a full quit. Named Herdr sessions: `HERDR_SESSION=… herdr server reload-config`.

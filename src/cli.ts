@@ -33,7 +33,7 @@ function showHelp(): void {
     `    ${c.cyan}npx @arach/arach sites${c.reset}        Web properties`,
     `    ${c.cyan}npx @arach/arach agents${c.reset}       AI agent writing & experiments`,
     `    ${c.cyan}npx @arach/arach inbox${c.reset}        Check your agent inbox`,
-    `    ${c.cyan}npx @arach/arach ghostty${c.reset}      Ghostty black-gold themes`,
+    `    ${c.cyan}npx @arach/arach ghostty${c.reset}      Ghostty themes and named flavors`,
     "",
     `  ${c.bold}Options:${c.reset}`,
     `    ${c.cyan}--help${c.reset}, ${c.cyan}-h${c.reset}            Show this help`,
@@ -112,6 +112,8 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(() => {
-  showHelp();
+main().catch((error) => {
+  const message = error instanceof Error ? error.message : String(error);
+  console.error(message);
+  process.exit(1);
 });
