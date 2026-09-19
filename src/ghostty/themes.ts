@@ -15,6 +15,7 @@ export type GhosttyTheme = {
   iconScreen: string;
   herdr: Record<string, string>;
   uiAccent: string;
+  opacity: number;
 };
 
 /** Deepest field, gold only on the cursor. */
@@ -69,6 +70,7 @@ const voidTheme: GhosttyTheme = {
     yellow: "#c4a35a",
   },
   uiAccent: "#c4a35a",
+  opacity: 0.96,
 };
 
 /** The landed look: lacquer black, ivory text, gold metal. */
@@ -123,6 +125,7 @@ const lacquerTheme: GhosttyTheme = {
     yellow: "#e6c384",
   },
   uiAccent: "#e6c384",
+  opacity: 0.88,
 };
 
 /** Warmer floor, more brass in the chrome. */
@@ -177,6 +180,7 @@ const brassTheme: GhosttyTheme = {
     yellow: "#f0d78a",
   },
   uiAccent: "#e6c384",
+  opacity: 0.92,
 };
 
 export const ghosttyThemes: GhosttyTheme[] = [

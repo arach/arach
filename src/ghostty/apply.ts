@@ -51,6 +51,7 @@ export async function applyGhosttyTheme(theme: GhosttyTheme): Promise<{
     config = `# Ghostty — managed by arach ghostty apply\ntheme = ${theme.id}\n`;
   }
   config = upsertLine(config, "theme", theme.id);
+  config = upsertLine(config, "background-opacity", String(theme.opacity));
   config = upsertLine(config, "cursor-color", theme.cursor);
   config = upsertLine(config, "cursor-text", theme.cursorText);
   config = upsertLine(config, "unfocused-split-fill", theme.splitFill);

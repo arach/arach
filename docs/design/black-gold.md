@@ -35,11 +35,11 @@ Text is ivory, not gold. Gold is the accent only.
 
 ## Variants
 
-| Name | Ghostty id | Floor | Gold |
-|------|------------|-------|------|
-| void | `black-gold-void` | `#050505` | `#c4a35a` (cursor only) |
-| lacquer | `black-gold-lacquer` | `#0a0a0a` | `#e6c384` (landed look) |
-| brass | `black-gold-brass` | `#16130e` | `#e6c384` (warmer chrome) |
+| Name | Ghostty id | Floor | Gold | Opacity |
+|------|------------|-------|------|---------|
+| void | `black-gold-void` | `#050505` | `#c4a35a` (cursor only) | 0.96 |
+| lacquer | `black-gold-lacquer` | `#0a0a0a` | `#e6c384` (landed look) | 0.88 |
+| brass | `black-gold-brass` | `#16130e` | `#e6c384` (warmer chrome) | 0.92 |
 
 Lacquer is the default. Text stays ivory; gold is accent.
 
@@ -47,7 +47,7 @@ Lacquer is the default. Text stays ivory; gold is accent.
 
 | Surface | Mapping |
 |---------|---------|
-| Ghostty | `theme = black-gold-<variant>`, opacity 0.94, hidden titlebar, gold bar cursor, cursor smear only (no bloom) |
+| Ghostty | `theme = black-gold-<variant>`, per-variant opacity, hidden titlebar, gold bar cursor, cursor smear only (no bloom) |
 | Herdr | `theme.custom` from the active variant; UI accent matches gold |
 | Ghostty icon | ghost = gold, screen = field + select |
 
