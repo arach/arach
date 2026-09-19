@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { chmod, copyFile, mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import path from "node:path";
 
@@ -28,22 +28,14 @@ function codesignIdentity(): string {
     const out = execFileSync("security", ["find-identity", "-v", "-p", "codesigning"], {
       encoding: "utf8",
     });
-    const development = out.match(/"(Apple Development: [^"]+)"/);
-    if (development) return development[1];
     const developerId = out.match(/"(Developer ID Application: [^"]+)"/);
     if (developerId) return developerId[1];
+    const development = out.match(/"(Apple Development: [^"]+)"/);
+    if (development) return development[1];
   } catch {
     // fall through
   }
   return "-";
-}
-
-function sign(target: string, entitlements: string): void {
-  execFileSync(
-    "codesign",
-    ["--force", "--sign", codesignIdentity(), "--entitlements", entitlements, target],
-    { stdio: "pipe" }
-  );
 }
 
 export function flavorConfigSource(flavor: GhosttyFlavor): string {
@@ -75,58 +67,12 @@ split-divider-color = ${theme.splitDivider}
 `;
 }
 
-function infoPlist(flavor: GhosttyFlavor): string {
-  const xdg = flavorXdgHome(flavor);
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>CFBundleDevelopmentRegion</key>
-  <string>en</string>
-  <key>CFBundleDisplayName</key>
-  <string>${flavor.name}</string>
-  <key>CFBundleExecutable</key>
-  <string>ghostty</string>
-  <key>CFBundleIconFile</key>
-  <string>AppIcon</string>
-  <key>CFBundleIdentifier</key>
-  <string>${flavor.bundleId}</string>
-  <key>CFBundleInfoDictionaryVersion</key>
-  <string>6.0</string>
-  <key>CFBundleName</key>
-  <string>${flavor.name}</string>
-  <key>CFBundlePackageType</key>
-  <string>APPL</string>
-  <key>CFBundleShortVersionString</key>
-  <string>1.0</string>
-  <key>CFBundleVersion</key>
-  <string>1</string>
-  <key>LSEnvironment</key>
-  <dict>
-    <key>XDG_CONFIG_HOME</key>
-    <string>${xdg}</string>
-  </dict>
-  <key>LSMinimumSystemVersion</key>
-  <string>14.0</string>
-  <key>NSHighResolutionCapable</key>
-  <true/>
-  <key>NSSupportsAutomaticTermination</key>
-  <false/>
-</dict>
-</plist>
-`;
-}
-
-function entitlementsPlist(): string {
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>com.apple.security.cs.disable-library-validation</key>
-  <true/>
-</dict>
-</plist>
-`;
+function plistBuddy(app: string, command: string): void {
+  execFileSync("/usr/libexec/PlistBuddy", [
+    "-c",
+    command,
+    path.join(app, "Contents", "Info.plist"),
+  ]);
 }
 
 export async function installGhosttyFlavor(flavor: GhosttyFlavor): Promise<{
@@ -134,40 +80,23 @@ export async function installGhosttyFlavor(flavor: GhosttyFlavor): Promise<{
   config: string;
 }> {
   const app = flavorAppPath(flavor);
-  const contents = path.join(app, "Contents");
-  const macos = path.join(contents, "MacOS");
-  await mkdir(macos, { recursive: true });
+  execFileSync("rm", ["-rf", app]);
+  await mkdir(path.dirname(app), { recursive: true });
+  execFileSync("ditto", [GHOSTTY_APP, app]);
 
-  await writeFile(path.join(contents, "Info.plist"), infoPlist(flavor), "utf8");
-  await writeFile(path.join(contents, "PkgInfo"), "APPL????", "utf8");
-
-  const ghosttyBin = path.join(GHOSTTY_APP, "Contents", "MacOS", "ghostty");
-  const localGhostty = path.join(macos, "ghostty");
-  await copyFile(ghosttyBin, localGhostty);
-  await chmod(localGhostty, 0o755);
-
-  const ln = (from: string, to: string) => {
-    execFileSync("ln", ["-sfn", from, to]);
-  };
-  ln(
-    path.join(GHOSTTY_APP, "Contents", "Frameworks"),
-    path.join(contents, "Frameworks")
+  plistBuddy(app, `Set :CFBundleIdentifier ${flavor.bundleId}`);
+  plistBuddy(app, `Set :CFBundleName ${flavor.name}`);
+  plistBuddy(app, `Set :CFBundleDisplayName ${flavor.name}`);
+  try {
+    plistBuddy(app, "Delete :LSEnvironment");
+  } catch {
+    // none yet
+  }
+  plistBuddy(app, "Add :LSEnvironment dict");
+  plistBuddy(
+    app,
+    `Add :LSEnvironment:XDG_CONFIG_HOME string ${flavorXdgHome(flavor)}`
   );
-  ln(
-    path.join(GHOSTTY_APP, "Contents", "Resources"),
-    path.join(contents, "Resources")
-  );
-
-  const entitlements = path.join(
-    homedir(),
-    ".config",
-    "ghostty",
-    "flavors",
-    ".entitlements.plist"
-  );
-  await mkdir(path.dirname(entitlements), { recursive: true });
-  await writeFile(entitlements, entitlementsPlist(), "utf8");
-  sign(localGhostty, entitlements);
 
   const source = flavorConfigSource(flavor);
   const aliasPath = flavorConfigPath(flavor);
@@ -189,7 +118,12 @@ export async function installGhosttyFlavor(flavor: GhosttyFlavor): Promise<{
     await writeFile(path.join(themesDir, theme.id), ghosttyThemeFile(theme), "utf8");
   }
 
-  sign(app, entitlements);
+  const identity = codesignIdentity();
+  execFileSync(
+    "codesign",
+    ["--force", "--deep", "--sign", identity, app],
+    { stdio: "pipe" }
+  );
   execFileSync("xattr", ["-cr", app]);
 
   return { app, config: xdgConfig };
