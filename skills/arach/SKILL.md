@@ -30,6 +30,24 @@ matches the task instead of carrying every workflow into context.
 - Separate verified current behavior from inference and planned behavior.
 - Use exact project nouns, paths, states, and commands.
 
+## Secrets
+
+Credentials live in the per-machine macOS login keychain through the `secret`
+CLI (`~/.local/bin/secret`).
+
+- Launch long-lived processes such as agents, MCP servers, and tmux sessions
+  with `secret run KEY -- cmd`, so the value exists only inside that process
+  environment.
+- Never pass values as command arguments or write them into dotenv files,
+  transcripts, or temp files.
+- `secret list` reads a synced index of names, so a name can appear on a
+  machine whose keychain does not hold the value. Verify with
+  `secret get KEY >/dev/null` before depending on it.
+- A locked keychain reached over SSH fails with "User interaction is not
+  allowed". Unlock once at that machine's console instead of moving values
+  over the network as a workaround. When another machine needs a credential,
+  provision its keychain deliberately, one key at a time, from that machine.
+
 ## Bundled skill routing
 
 This GitHub repository contains four installable skills:
@@ -68,6 +86,7 @@ Load only the reference required by the request:
   component system to `claude.ai/design` without overwriting designs.
 - [Design iteration loop](references/design-iteration-loop.md): compare rendered
   visual directions against a written rubric and bounded budget.
+- [Terminal](references/terminal.md): Ghostty + Herdr black-gold surface.
 
 Do not assume that another account has Scout, design-sync, sub-agent, or browser
 capabilities. Check availability before invoking a workflow. If a required
