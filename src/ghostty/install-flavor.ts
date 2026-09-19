@@ -38,12 +38,14 @@ function codesignIdentity(): string {
   return "-";
 }
 
-export function flavorConfigSource(flavor: GhosttyFlavor): string {
-  const theme = flavorTheme(flavor);
+export function flavorConfigSource(
+  flavor: GhosttyFlavor,
+  theme = flavorTheme(flavor)
+): string {
   const cwd = flavorHome(flavor);
   const herdr = which("herdr");
   const base = path.join(homedir(), ".config", "ghostty", "config");
-  return `# ${flavor.name} — Ghostty flavor
+  return `# ${flavor.name} — Ghostty flavor (${theme.name})
 # Still Ghostty. Named, tinted, themed.
 
 config-file = ${base}
@@ -56,8 +58,8 @@ auto-update = off
 
 macos-icon = custom-style
 macos-icon-frame = ${flavor.iconFrame}
-macos-icon-ghost-color = ${flavor.iconGhost}
-macos-icon-screen-color = ${flavor.iconScreen}
+macos-icon-ghost-color = ${theme.iconGhost}
+macos-icon-screen-color = ${theme.iconScreen}
 
 background-opacity = ${theme.opacity}
 cursor-color = ${theme.cursor}
@@ -65,6 +67,32 @@ cursor-text = ${theme.cursorText}
 unfocused-split-fill = ${theme.splitFill}
 split-divider-color = ${theme.splitDivider}
 `;
+}
+
+export async function writeFlavorConfig(
+  flavor: GhosttyFlavor,
+  theme = flavorTheme(flavor)
+): Promise<string> {
+  const source = flavorConfigSource(flavor, theme);
+  const aliasPath = flavorConfigPath(flavor);
+  await mkdir(path.dirname(aliasPath), { recursive: true });
+  await writeFile(aliasPath, source, "utf8");
+
+  const xdgConfig = path.join(flavorXdgHome(flavor), "ghostty", "config");
+  await mkdir(path.dirname(xdgConfig), { recursive: true });
+  await writeFile(xdgConfig, source, "utf8");
+  execFileSync("ln", [
+    "-sfn",
+    path.join(homedir(), ".config", "ghostty", "themes"),
+    path.join(flavorXdgHome(flavor), "ghostty", "themes"),
+  ]);
+
+  const themesDir = path.join(homedir(), ".config", "ghostty", "themes");
+  await mkdir(themesDir, { recursive: true });
+  for (const item of ghosttyThemes) {
+    await writeFile(path.join(themesDir, item.id), ghosttyThemeFile(item), "utf8");
+  }
+  return xdgConfig;
 }
 
 function plistBuddy(app: string, command: string): void {
@@ -75,7 +103,10 @@ function plistBuddy(app: string, command: string): void {
   ]);
 }
 
-export async function installGhosttyFlavor(flavor: GhosttyFlavor): Promise<{
+export async function installGhosttyFlavor(
+  flavor: GhosttyFlavor,
+  theme = flavorTheme(flavor)
+): Promise<{
   app: string;
   config: string;
 }> {
@@ -98,25 +129,7 @@ export async function installGhosttyFlavor(flavor: GhosttyFlavor): Promise<{
     `Add :LSEnvironment:XDG_CONFIG_HOME string ${flavorXdgHome(flavor)}`
   );
 
-  const source = flavorConfigSource(flavor);
-  const aliasPath = flavorConfigPath(flavor);
-  await mkdir(path.dirname(aliasPath), { recursive: true });
-  await writeFile(aliasPath, source, "utf8");
-
-  const xdgConfig = path.join(flavorXdgHome(flavor), "ghostty", "config");
-  await mkdir(path.dirname(xdgConfig), { recursive: true });
-  await writeFile(xdgConfig, source, "utf8");
-  execFileSync("ln", [
-    "-sfn",
-    path.join(homedir(), ".config", "ghostty", "themes"),
-    path.join(flavorXdgHome(flavor), "ghostty", "themes"),
-  ]);
-
-  const themesDir = path.join(homedir(), ".config", "ghostty", "themes");
-  await mkdir(themesDir, { recursive: true });
-  for (const theme of ghosttyThemes) {
-    await writeFile(path.join(themesDir, theme.id), ghosttyThemeFile(theme), "utf8");
-  }
+  const xdgConfig = await writeFlavorConfig(flavor, theme);
 
   const identity = codesignIdentity();
   execFileSync(
@@ -130,5 +143,17 @@ export async function installGhosttyFlavor(flavor: GhosttyFlavor): Promise<{
 }
 
 export function openGhosttyFlavor(flavor: GhosttyFlavor): void {
-  execFileSync("open", ["-n", flavorAppPath(flavor)]);
+  const xdgConfig = path.join(flavorXdgHome(flavor), "ghostty", "config");
+  try {
+    execFileSync("open", ["-n", flavorAppPath(flavor)]);
+  } catch {
+    // Unnotarized wrappers often fail silently.
+  }
+  execFileSync("open", [
+    "-na",
+    GHOSTTY_APP,
+    "--args",
+    "--config-default-files=false",
+    `--config-file=${xdgConfig}`,
+  ]);
 }

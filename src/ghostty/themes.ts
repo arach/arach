@@ -183,10 +183,66 @@ const brassTheme: GhosttyTheme = {
   opacity: 0.92,
 };
 
+/** Cool storm zinc. For Lattices and any flavor that should not go gold. */
+const stormyTheme: GhosttyTheme = {
+  id: "stormy",
+  name: "stormy",
+  summary: "Cool storm zinc",
+  background: "#0b0f14",
+  foreground: "#c8d4dc",
+  cursor: "#8eb4c4",
+  cursorText: "#0b0f14",
+  selectionBg: "#1c2a32",
+  selectionFg: "#e4eef2",
+  palette: [
+    "#151a20",
+    "#c45c4a",
+    "#7a9a86",
+    "#3a4a50",
+    "#6a8aa0",
+    "#7a7e9a",
+    "#6a9aaa",
+    "#c8d4dc",
+    "#4a5560",
+    "#e07060",
+    "#8ab49a",
+    "#8eb4c4",
+    "#8aa8b8",
+    "#8a90b0",
+    "#7ab0b8",
+    "#e4eef2",
+  ],
+  splitFill: "#0b0f14",
+  splitDivider: "#1c2a32",
+  iconGhost: "#8eb4c4",
+  iconScreen: "#0b0f14,#1c2a32",
+  herdr: {
+    panel_bg: "#0b0f14",
+    surface0: "#151a20",
+    surface1: "#1c2a32",
+    surface_dim: "#07090c",
+    overlay0: "#4a5560",
+    overlay1: "#8aa8b8",
+    text: "#c8d4dc",
+    subtext0: "#8aa8b8",
+    accent: "#8eb4c4",
+    mauve: "#8a90b0",
+    blue: "#6a8aa0",
+    teal: "#6a9aaa",
+    green: "#7a9a86",
+    peach: "#8eb4c4",
+    red: "#c45c4a",
+    yellow: "#8aa8b8",
+  },
+  uiAccent: "#8eb4c4",
+  opacity: 0.9,
+};
+
 export const ghosttyThemes: GhosttyTheme[] = [
   voidTheme,
   lacquerTheme,
   brassTheme,
+  stormyTheme,
 ];
 
 export const defaultGhosttyTheme = lacquerTheme;

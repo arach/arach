@@ -69,10 +69,14 @@ export function flavorXdgHome(flavor: GhosttyFlavor): string {
   return path.join(homedir(), ".config", `ghostty-${flavor.id}`);
 }
 
-export function flavorTheme(flavor: GhosttyFlavor): GhosttyTheme {
-  const theme = findGhosttyTheme(flavor.themeName);
+export function flavorTheme(
+  flavor: GhosttyFlavor,
+  override?: string
+): GhosttyTheme {
+  const name = override ?? flavor.themeName;
+  const theme = findGhosttyTheme(name);
   if (!theme) {
-    throw new Error(`theme ${flavor.themeName} missing for flavor ${flavor.id}`);
+    throw new Error(`theme ${name} missing for flavor ${flavor.id}`);
   }
   return theme;
 }

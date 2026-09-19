@@ -1,14 +1,13 @@
 # Terminal
 
-Ghostty + Herdr use **black-gold** with three variants: **void**, **lacquer**, **brass**. Design language: `docs/design/black-gold.md` in the arach/arach repo.
+Ghostty + Herdr use **black-gold** (void, lacquer, brass) plus **stormy** (cool zinc). Last argument to `open` is the theme.
 
 ```bash
-npx @arach/arach ghostty                 # preview all three
-npx @arach/arach ghostty preview lacquer
-npx @arach/arach ghostty apply lacquer   # default landed look
-npx @arach/arach ghostty install         # named, tinted Ghostty apps
-npx @arach/arach ghostty open talkie     # Talkie Ghost (gold lacquer)
-npx @arach/arach ghostty open lattices   # Lattices Ghost (zinc void)
+bun arach ghostty
+bun arach ghostty preview stormy
+bun arach ghostty apply lacquer
+bun ghostty open talkie
+bun ghostty open lattices stormy
 ```
 
 `apply` writes the three Ghostty theme files, sets `theme = black-gold-<variant>`, and overlays Herdr `theme.custom`. Reload Ghostty with `cmd+shift+,`. Opacity and blur need a full quit. Named Herdr sessions: `HERDR_SESSION=… herdr server reload-config`.

@@ -3,11 +3,13 @@ import { blank, heading, prompt, print } from "../render.js";
 import { applyGhosttyTheme } from "../ghostty/apply.js";
 import {
   findGhosttyFlavor,
+  flavorTheme,
   ghosttyFlavors,
 } from "../ghostty/flavors.js";
 import {
   installGhosttyFlavor,
   openGhosttyFlavor,
+  writeFlavorConfig,
 } from "../ghostty/install-flavor.js";
 import { renderPreview } from "../ghostty/preview.js";
 import {
@@ -24,11 +26,11 @@ function usage(): string[] {
     heading("GHOSTTY"),
     blank(),
     `  ${c.cyan}arach ghostty${c.reset}                    Preview theme variants`,
-    `  ${c.cyan}arach ghostty preview${c.reset} [name]    Preview void, lacquer, or brass`,
+    `  ${c.cyan}arach ghostty preview${c.reset} [name]    Preview a theme`,
     `  ${c.cyan}arach ghostty apply${c.reset} <name>      Write the palette into ~/.config/ghostty`,
     `  ${c.cyan}arach ghostty flavors${c.reset}           Named Ghostty apps (tint + theme + Herdr)`,
     `  ${c.cyan}arach ghostty install${c.reset} [name]    Build ~/Applications/dev/<Name> Ghost.app`,
-    `  ${c.cyan}arach ghostty open${c.reset} <name>       Open that named app`,
+    `  ${c.cyan}arach ghostty open${c.reset} <flavor> [theme]   Last arg is the theme`,
     blank(),
     `  ${c.dim}themes:${c.reset} ${ghosttyThemes.map((t) => t.name).join(", ")}  ${c.dim}(default apply: ${defaultGhosttyTheme.name})${c.reset}`,
     `  ${c.dim}flavors:${c.reset} ${flavorNames}`,
@@ -43,8 +45,21 @@ function flavorLines(): string[] {
   });
 }
 
+function resolveThemeArg(raw: string | undefined, flavorId?: string) {
+  if (!raw) return undefined;
+  const theme = findGhosttyTheme(raw);
+  if (!theme) {
+    console.error(`Unknown theme: ${raw}`);
+    print(usage());
+    process.exitCode = 1;
+    return null;
+  }
+  void flavorId;
+  return theme;
+}
+
 export async function runGhostty(args: string[]): Promise<void> {
-  const [action, name] = args;
+  const [action, name, themeArg] = args;
 
   if (!action || action === "preview" || action === "list") {
     const theme = name ? findGhosttyTheme(name) : undefined;
@@ -92,7 +107,7 @@ export async function runGhostty(args: string[]): Promise<void> {
       ...flavorLines(),
       blank(),
       `  ${c.dim}arach ghostty install talkie${c.reset}`,
-      `  ${c.dim}arach ghostty open lattices${c.reset}`,
+      `  ${c.dim}arach ghostty open lattices stormy${c.reset}`,
     ]);
     return;
   }
@@ -113,9 +128,14 @@ export async function runGhostty(args: string[]): Promise<void> {
       heading("FLAVORS"),
       blank(),
     ];
+    const theme = themeArg ? resolveThemeArg(themeArg) : undefined;
+    if (themeArg && theme === null) return;
     for (const flavor of selected) {
       if (!flavor) continue;
-      const paths = await installGhosttyFlavor(flavor);
+      const paths = await installGhosttyFlavor(
+        flavor,
+        theme ?? flavorTheme(flavor)
+      );
       lines.push(
         `  ${c.bold}${flavor.name}${c.reset}  ${c.dim}${flavor.summary}${c.reset}`
       );
@@ -138,12 +158,17 @@ export async function runGhostty(args: string[]): Promise<void> {
       process.exitCode = 1;
       return;
     }
-    await installGhosttyFlavor(flavor);
+    const theme = themeArg
+      ? resolveThemeArg(themeArg)
+      : flavorTheme(flavor);
+    if (themeArg && theme === null) return;
+    if (!theme) return;
+    await writeFlavorConfig(flavor, theme);
     openGhosttyFlavor(flavor);
     print([
       prompt("ghostty open"),
       blank(),
-      `  opened ${c.bold}${flavor.name}${c.reset}  ${c.dim}${flavor.summary}${c.reset}`,
+      `  opened ${c.bold}${flavor.name}${c.reset}  ${c.dim}${theme.name}${c.reset}  ${theme.summary}`,
     ]);
     return;
   }
@@ -154,13 +179,16 @@ export async function runGhostty(args: string[]): Promise<void> {
   }
 
   const implied = findGhosttyFlavor(action);
-  if (implied && !name) {
-    await installGhosttyFlavor(implied);
+  if (implied) {
+    const theme = name ? resolveThemeArg(name) : flavorTheme(implied);
+    if (name && theme === null) return;
+    if (!theme) return;
+    await writeFlavorConfig(implied, theme);
     openGhosttyFlavor(implied);
     print([
       prompt(`ghostty ${implied.id}`),
       blank(),
-      `  opened ${c.bold}${implied.name}${c.reset}  ${c.dim}${implied.summary}${c.reset}`,
+      `  opened ${c.bold}${implied.name}${c.reset}  ${c.dim}${theme.name}${c.reset}  ${theme.summary}`,
     ]);
     return;
   }
