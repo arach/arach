@@ -7,6 +7,7 @@ import { showAccounts } from "./commands/accounts.js";
 import { showSites } from "./commands/sites.js";
 import { showAgents } from "./commands/agents.js";
 import { showInbox } from "./commands/inbox.js";
+import { runGhostty } from "./commands/ghostty.js";
 import { hydrate, hasData } from "./data.js";
 import { fetchCardData, ping } from "./remote.js";
 import { c } from "./colors.js";
@@ -32,6 +33,7 @@ function showHelp(): void {
     `    ${c.cyan}npx @arach/arach sites${c.reset}        Web properties`,
     `    ${c.cyan}npx @arach/arach agents${c.reset}       AI agent writing & experiments`,
     `    ${c.cyan}npx @arach/arach inbox${c.reset}        Check your agent inbox`,
+    `    ${c.cyan}npx @arach/arach ghostty${c.reset}      Ghostty black-gold themes`,
     "",
     `  ${c.bold}Options:${c.reset}`,
     `    ${c.cyan}--help${c.reset}, ${c.cyan}-h${c.reset}            Show this help`,
@@ -61,11 +63,19 @@ async function main(): Promise<void> {
 
   const sub = positionals[0];
 
-  // inbox short-circuits — no card data needed
+  // inbox and ghostty short-circuit — no card data needed
   if (sub === "inbox") {
     ping("run", { command: "inbox" });
     console.log();
     await showInbox();
+    console.log();
+    return;
+  }
+
+  if (sub === "ghostty") {
+    ping("run", { command: "ghostty" });
+    console.log();
+    await runGhostty(positionals.slice(1));
     console.log();
     return;
   }

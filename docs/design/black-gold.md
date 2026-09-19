@@ -33,12 +33,30 @@ Text is ivory, not gold. Gold is the accent only.
 - Features: `calt`, `liga`, `zero`
 - Cell: width −4%, height −2%
 
+## Variants
+
+| Name | Ghostty id | Floor | Gold |
+|------|------------|-------|------|
+| void | `black-gold-void` | `#050505` | `#c4a35a` (cursor only) |
+| lacquer | `black-gold-lacquer` | `#0a0a0a` | `#e6c384` (landed look) |
+| brass | `black-gold-brass` | `#16130e` | `#e6c384` (warmer chrome) |
+
+Lacquer is the default. Text stays ivory; gold is accent.
+
 ## Surfaces
 
 | Surface | Mapping |
 |---------|---------|
-| Ghostty | theme `black-gold`, opacity 0.94, hidden titlebar, gold bar cursor, cursor smear only (no bloom) |
-| Herdr | `theme.custom` tokens in the table above; UI accent `#e6c384` |
-| Ghostty icon | ghost `#e6c384`, screen `#0a0a0a,#3d3420` |
+| Ghostty | `theme = black-gold-<variant>`, opacity 0.94, hidden titlebar, gold bar cursor, cursor smear only (no bloom) |
+| Herdr | `theme.custom` from the active variant; UI accent matches gold |
+| Ghostty icon | ghost = gold, screen = field + select |
 
-Apply from [skills/arach/references/terminal.md](../../skills/arach/references/terminal.md).
+## Command
+
+```bash
+npx @arach/arach ghostty                 # preview all three
+npx @arach/arach ghostty preview lacquer
+npx @arach/arach ghostty apply lacquer
+```
+
+Apply writes `~/.config/ghostty/themes/black-gold-*` and points Ghostty + Herdr at the named variant. Reload Ghostty with `cmd+shift+,`.

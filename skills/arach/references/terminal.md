@@ -1,13 +1,14 @@
 # Terminal
 
-Ghostty + Herdr on this machine use **black-gold**. Design language: `docs/design/black-gold.md` in the arach/arach repo.
+Ghostty + Herdr use **black-gold** with three variants: **void**, **lacquer**, **brass**. Design language: `docs/design/black-gold.md` in the arach/arach repo.
 
-When setting up or restoring a terminal:
+```bash
+npx @arach/arach ghostty                 # preview all three
+npx @arach/arach ghostty preview lacquer
+npx @arach/arach ghostty apply lacquer   # default landed look
+```
 
-1. Write the Ghostty theme and config below.
-2. Overlay Herdr `theme.custom` with the same tokens.
-3. Reload Ghostty with `cmd+shift+,`. Opacity and blur need a full quit.
-4. Reload Herdr with `herdr server reload-config` (set `HERDR_SESSION` for a named session).
+`apply` writes the three Ghostty theme files, sets `theme = black-gold-<variant>`, and overlays Herdr `theme.custom`. Reload Ghostty with `cmd+shift+,`. Opacity and blur need a full quit. Named Herdr sessions: `HERDR_SESSION=… herdr server reload-config`.
 
 Do not switch the palette to Catppuccin, Kanagawa, or crust-black unless asked. Do not enable bloom shaders. Keep JetBrains Light; do not turn `font-thicken` on.
 
