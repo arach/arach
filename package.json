@@ -12,7 +12,9 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "validate:skills": "bun scripts/validate-skills.ts"
+    "validate:skills": "bun scripts/validate-skills.ts",
+    "arach": "bun src/cli.ts",
+    "ghostty": "bun src/cli.ts ghostty"
   },
   "engines": {
     "node": ">=18"
