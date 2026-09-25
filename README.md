@@ -11,6 +11,7 @@ Code, and other agents supported by the [Skills CLI](https://skills.sh/).
 | [`arach`](skills/arach/SKILL.md) | Personal project context, conventions, and workflow routing |
 | [`writing`](skills/writing/SKILL.md) | Arach's technical, editorial, and mixed writing system |
 | [`humanizer`](skills/humanizer/SKILL.md) | Anti-AI-pattern diagnosis and prose reconstruction |
+| [`secret-cli`](skills/secret-cli/SKILL.md) | Local macOS credentials and authenticator codes |
 | [`dewey-docs`](skills/dewey-docs/SKILL.md) | Dewey documentation and agent-readiness workflows |
 
 List the published skills without installing them:
@@ -62,6 +63,11 @@ npx skills add . --list
 The skill validator checks frontmatter, directory names, relative references,
 portable paths, Markdown whitespace, and the public README catalog. GitHub
 Actions runs the same checks for pull requests and pushes to `main`.
+
+## Local developer tools
+
+[Secret CLI and LocalOTP](tools/secret/README.md) provide configurable macOS
+credential and authenticator-code tools. [Agent usage](skills/secret-cli/SKILL.md).
 
 ## Profile CLI
 

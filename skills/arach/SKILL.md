@@ -119,6 +119,12 @@ Use these only when the new project does not define its own stack:
 6. Configure an Open Graph image with `@arach/og` when the project has a public
    URL.
 
+## Local credential tools
+
+For an authorized task needing stored credentials or an authenticator code,
+load [secret-cli](../secret-cli/SKILL.md). Configure machine paths and account
+aliases locally; keep deployment details out of shared instructions.
+
 ## Installation across accounts
 
 GitHub is the source of truth for this skill collection.
