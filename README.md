@@ -82,6 +82,7 @@ From this checkout, Bun is the local command:
 ```bash
 cd ~/dev/arach
 bun arach                 # intro card
+bun arach ghostty setup   # whole look on a new machine
 bun arach ghostty         # theme preview
 bun arach ghostty apply lacquer
 bun ghostty               # same as arach ghostty

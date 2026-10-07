@@ -1,0 +1,72 @@
+# Ghostty — managed by `arach ghostty setup`
+# The landed look: black-gold lacquer, JetBrains Light, glass.
+# `arach ghostty apply <theme>` swaps the theme lines below in place.
+# Reload: cmd+shift+,
+# Opacity and blur need a full quit (cmd+q) then reopen.
+
+# Theme
+theme = black-gold-lacquer
+window-theme = dark
+window-colorspace = display-p3
+alpha-blending = linear-corrected
+minimum-contrast = 1.1
+
+# Type — JetBrains Light. Machines without plain JetBrains Mono fall
+# through to the Nerd Font cut of the same family, which also carries icons.
+font-family = JetBrains Mono
+font-family = JetBrainsMono Nerd Font Mono
+font-style = Light
+font-style-bold = Regular
+font-style-italic = Light Italic
+font-style-bold-italic = Italic
+font-size = 12
+font-thicken = false
+font-feature = calt
+font-feature = liga
+font-feature = zero
+adjust-cell-width = -4%
+adjust-cell-height = -2%
+
+# Glass — lacquer sits at 0.88.
+background-opacity = 0.88
+background-blur = 36
+
+# Chrome
+macos-titlebar-style = hidden
+macos-titlebar-proxy-icon = hidden
+macos-window-shadow = true
+window-padding-x = 12
+window-padding-y = 10, 12
+window-padding-balance = true
+window-padding-color = extend
+window-save-state = never
+window-vsync = true
+
+macos-icon = custom-style
+macos-icon-frame = aluminum
+macos-icon-ghost-color = #e6c384
+macos-icon-screen-color = #0a0a0a,#3d3420
+
+# Cursor
+cursor-style = bar
+cursor-style-blink = true
+cursor-opacity = 1
+cursor-color = #e6c384
+cursor-text = #0a0a0a
+adjust-cursor-thickness = 1
+mouse-hide-while-typing = true
+
+# Splits
+unfocused-split-opacity = 0.9
+unfocused-split-fill = #0a0a0a
+split-divider-color = #2a2418
+
+custom-shader = ~/.config/ghostty/shaders/cursor-smear.glsl
+custom-shader-animation = true
+
+# Behavior. A login zsh; ~/.config/ghostty/title.zsh owns the title.
+command = /bin/zsh
+copy-on-select = clipboard
+shell-integration-features = cursor,no-sudo,no-title,no-ssh-env,no-ssh-terminfo,path
+keybind = shift+enter=text:\x1b\r
+macos-option-as-alt = true

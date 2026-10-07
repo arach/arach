@@ -1,6 +1,8 @@
+import { existsSync } from "node:fs";
 import { homedir } from "node:os";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import {
   type GhosttyTheme,
@@ -36,10 +38,13 @@ export async function writeThemeFiles(): Promise<string[]> {
   return written;
 }
 
-export async function applyGhosttyTheme(theme: GhosttyTheme): Promise<{
+export async function applyGhosttyTheme(
+  theme: GhosttyTheme,
+  options: { herdr?: boolean } = {}
+): Promise<{
   themeFile: string;
   config: string;
-  herdr: string;
+  herdr: string | null;
 }> {
   await writeThemeFiles();
   const themeFile = path.join(ghosttyDir(), "themes", theme.id);
@@ -59,6 +64,8 @@ export async function applyGhosttyTheme(theme: GhosttyTheme): Promise<{
   config = upsertLine(config, "macos-icon-ghost-color", theme.iconGhost);
   config = upsertLine(config, "macos-icon-screen-color", theme.iconScreen);
   await writeFile(configPath, config.endsWith("\n") ? config : `${config}\n`, "utf8");
+
+  if (options.herdr === false) return { themeFile, config: configPath, herdr: null };
 
   const herdrPath = herdrConfigPath();
   let herdr = "";
@@ -89,4 +96,58 @@ export async function applyGhosttyTheme(theme: GhosttyTheme): Promise<{
   await writeFile(herdrPath, herdr.endsWith("\n") ? herdr : `${herdr}\n`, "utf8");
 
   return { themeFile, config: configPath, herdr: herdrPath };
+}
+
+/** The repo's ghostty/ folder: next to src/ when run from a checkout. */
+function bundledGhosttyDir(): string {
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  for (const candidate of [
+    path.resolve(here, "..", "..", "ghostty"),
+    path.resolve(here, "..", "ghostty"),
+  ]) {
+    if (existsSync(path.join(candidate, "config"))) return candidate;
+  }
+  throw new Error("ghostty/ files not found; run setup from an arach checkout");
+}
+
+function stamp(): string {
+  return new Date().toISOString().replace(/[-:]/g, "").replace("T", "-").slice(0, 15);
+}
+
+/**
+ * The whole look, not just the palette: base config, cursor shader, and the
+ * titlebar script, then the theme on top. An existing config that differs is
+ * kept as config.bak-<stamp>.
+ */
+export async function setupGhostty(theme: GhosttyTheme): Promise<{
+  config: string;
+  backup: string | null;
+  shader: string;
+  title: string;
+  herdr: string | null;
+}> {
+  const source = bundledGhosttyDir();
+  const target = ghosttyDir();
+  await mkdir(path.join(target, "shaders"), { recursive: true });
+
+  const configPath = path.join(target, "config");
+  const base = await readFile(path.join(source, "config"), "utf8");
+  let backup: string | null = null;
+  if (existsSync(configPath)) {
+    const current = await readFile(configPath, "utf8");
+    if (current !== base) {
+      backup = `${configPath}.bak-${stamp()}`;
+      await copyFile(configPath, backup);
+    }
+  }
+  await writeFile(configPath, base, "utf8");
+
+  const shader = path.join(target, "shaders", "cursor-smear.glsl");
+  await copyFile(path.join(source, "shaders", "cursor-smear.glsl"), shader);
+  const title = path.join(target, "title.zsh");
+  await copyFile(path.join(source, "title.zsh"), title);
+
+  const herdrInstalled = existsSync(path.dirname(herdrConfigPath()));
+  const applied = await applyGhosttyTheme(theme, { herdr: herdrInstalled });
+  return { config: configPath, backup, shader, title, herdr: applied.herdr };
 }

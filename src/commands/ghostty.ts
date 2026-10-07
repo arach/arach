@@ -1,6 +1,6 @@
 import { c } from "../colors.js";
 import { blank, heading, prompt, print } from "../render.js";
-import { applyGhosttyTheme } from "../ghostty/apply.js";
+import { applyGhosttyTheme, setupGhostty } from "../ghostty/apply.js";
 import {
   findGhosttyFlavor,
   flavorTheme,
@@ -27,6 +27,7 @@ function usage(): string[] {
     blank(),
     `  ${c.cyan}arach ghostty${c.reset}                    Preview theme variants`,
     `  ${c.cyan}arach ghostty preview${c.reset} [name]    Preview a theme`,
+    `  ${c.cyan}arach ghostty setup${c.reset} [name]      Install the whole look: config, shader, title, theme`,
     `  ${c.cyan}arach ghostty apply${c.reset} <name>      Write the palette into ~/.config/ghostty`,
     `  ${c.cyan}arach ghostty flavors${c.reset}           Named Ghostty apps (tint + theme + Herdr)`,
     `  ${c.cyan}arach ghostty install${c.reset} [name]    Build ~/Applications/dev/<Name> Ghost.app`,
@@ -90,11 +91,38 @@ export async function runGhostty(args: string[]): Promise<void> {
       blank(),
       `  applied ${c.bold}${theme.name}${c.reset}  ${c.dim}${theme.summary}${c.reset}`,
       `  ${c.dim}${paths.config}${c.reset}`,
-      `  ${c.dim}${paths.herdr}${c.reset}`,
+      ...(paths.herdr ? [`  ${c.dim}${paths.herdr}${c.reset}`] : []),
       blank(),
       `  ${c.dim}reload: cmd+shift+, in Ghostty · herdr server reload-config${c.reset}`,
     ]);
     console.log(renderPreview([theme]));
+    return;
+  }
+
+  if (action === "setup") {
+    const theme = findGhosttyTheme(name ?? defaultGhosttyTheme.name);
+    if (!theme) {
+      console.error(`Unknown variant: ${name}`);
+      print(usage());
+      process.exitCode = 1;
+      return;
+    }
+    const paths = await setupGhostty(theme);
+    print([
+      prompt("ghostty setup"),
+      blank(),
+      heading("GHOSTTY"),
+      blank(),
+      `  set up ${c.bold}${theme.name}${c.reset}  ${c.dim}${theme.summary}${c.reset}`,
+      `  ${c.dim}${paths.config}${c.reset}`,
+      ...(paths.backup ? [`  ${c.dim}previous config kept at ${paths.backup}${c.reset}`] : []),
+      `  ${c.dim}${paths.shader}${c.reset}`,
+      `  ${c.dim}${paths.title}${c.reset}`,
+      ...(paths.herdr ? [`  ${c.dim}${paths.herdr}${c.reset}`] : []),
+      blank(),
+      `  ${c.dim}titlebar: source ~/.config/ghostty/title.zsh from ~/.zshrc inside a Ghostty check${c.reset}`,
+      `  ${c.dim}quit Ghostty (cmd+q) and reopen; opacity and blur need a full restart${c.reset}`,
+    ]);
     return;
   }
 
