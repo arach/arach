@@ -3,6 +3,7 @@
 Ghostty + Herdr use **black-gold** (void, lacquer, brass) plus **stormy** (cool zinc). Last argument to `open` is the theme.
 
 ```bash
+bun arach ghostty setup            # new machine: the whole look
 bun arach ghostty
 bun arach ghostty preview stormy
 bun arach ghostty apply lacquer
@@ -10,7 +11,9 @@ bun ghostty open talkie
 bun ghostty open lattices stormy
 ```
 
-`apply` writes the three Ghostty theme files, sets `theme = black-gold-<variant>`, and overlays Herdr `theme.custom`. Reload Ghostty with `cmd+shift+,`. Opacity and blur need a full quit. Named Herdr sessions: `HERDR_SESSION=… herdr server reload-config`.
+`setup` installs the whole look from the repo's `ghostty/` folder: the base config (type, glass, chrome, cursor), `shaders/cursor-smear.glsl`, and `title.zsh`, then applies the theme. A differing config is kept as `config.bak-<stamp>`. The titlebar needs `title.zsh` sourced from `~/.zshrc` inside a `$TERM_PROGRAM == ghostty` check.
+
+`apply` writes the Ghostty theme files, sets `theme = black-gold-<variant>`, and overlays Herdr `theme.custom`. Reload Ghostty with `cmd+shift+,`. Opacity and blur need a full quit. Named Herdr sessions: `HERDR_SESSION=… herdr server reload-config`.
 
 Do not switch the palette to Catppuccin, Kanagawa, or crust-black unless asked. Do not enable bloom shaders. Keep JetBrains Light; do not turn `font-thicken` on.
 
@@ -25,7 +28,7 @@ Do not switch the palette to Catppuccin, Kanagawa, or crust-black unless asked. 
 
 ## Ghostty theme
 
-Path: `~/.config/ghostty/themes/black-gold`
+Path: `~/.config/ghostty/themes/black-gold-lacquer`
 
 ```
 palette = 0=#1a1a1a
@@ -53,20 +56,7 @@ selection-background = #3d3420
 selection-foreground = #f2ead2
 ```
 
-Required Ghostty keys (rest of the file can keep local keybinds):
-
-```
-theme = black-gold
-font-family = JetBrains Mono
-font-family = GeistMono Nerd Font Mono
-font-style = Light
-font-style-bold = Regular
-font-thicken = false
-background-opacity = 0.88
-cursor-color = #e6c384
-unfocused-split-fill = #0a0a0a
-split-divider-color = #2a2418
-```
+The full config lives in `ghostty/config` at the repo root; that file is the source of truth for keys, and `setup` installs it.
 
 ## Herdr
 
