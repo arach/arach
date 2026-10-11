@@ -50,7 +50,7 @@ CLI (`~/.local/bin/secret`).
 
 ## Bundled skill routing
 
-This GitHub repository contains five installable skills:
+This GitHub repository contains six installable skills:
 
 | Skill | Use it for |
 | --- | --- |
@@ -58,6 +58,7 @@ This GitHub repository contains five installable skills:
 | `writing` | Arach's technical, editorial, and mixed writing modes |
 | `humanizer` | An explicit anti-AI-pattern audit or generic prose cleanup |
 | `dewey-docs` | Dewey documentation setup and agent-ready documentation work |
+| `secret-cli` | Local macOS credentials and authenticator codes through `secret` |
 | `fleet` | Installing and updating Arach's published tools across his machines |
 
 Use `writing` for text written in Arach's voice. Use `humanizer` as an optional
