@@ -13,6 +13,7 @@ Code, and other agents supported by the [Skills CLI](https://skills.sh/).
 | [`humanizer`](skills/humanizer/SKILL.md) | Anti-AI-pattern diagnosis and prose reconstruction |
 | [`secret-cli`](skills/secret-cli/SKILL.md) | Local macOS credentials and authenticator codes |
 | [`dewey-docs`](skills/dewey-docs/SKILL.md) | Dewey documentation and agent-readiness workflows |
+| [`fleet`](skills/fleet/SKILL.md) | Install and update Arach's published tools on every machine |
 
 List the published skills without installing them:
 
