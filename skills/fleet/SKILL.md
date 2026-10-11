@@ -20,7 +20,8 @@ and the procedure for putting them on a host.
 
 Rules:
 
-- Ask before installing on, or changing, a machine other than the one you're on.
+- Arach tests a new build on one machine first. Once he calls it ready, every host should be on it: roll it out to all of them, not just the one in front of you. Until he does, ask before changing another machine.
+- Do the work over SSH from one machine, not by messaging an agent on each host (Scout or otherwise).
 - Over SSH, put `~/.local/bin`, `~/.bun/bin`, and `/opt/homebrew/bin` on `PATH` first, because non-login shells miss them.
 - Use Bun: `bun add -g` for CLIs and `bunx` to run them. Use npm only when a tool's own docs require it.
 - Never move secrets between machines. Each host's keychain is provisioned at that host; see the `arach` skill.
@@ -34,7 +35,7 @@ Rules:
 | Talkie | `@talkie/cli` | `talkie` | `arach/talkie` (`talkie`) | Macs |
 | Dewey | `@arach/dewey` | `dewey` | `arach/arach` (`dewey-docs`) | where docs are built |
 | Vox | `@voxd/cli` | `vox` | none | Macs that speak |
-| Arach | none | none | `arach/arach` (`arach`, `writing`, `humanizer`, `fleet`) | all |
+| Arach | none | none | `arach/arach` (`arach`, `writing`, `humanizer`, `secret-cli`, `fleet`) | all |
 
 fab isn't published yet: its CLI (`fab/cli`) is private and has no skill. Run it
 from a checkout until a package exists.
