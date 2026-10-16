@@ -14,6 +14,7 @@ Code, and other agents supported by the [Skills CLI](https://skills.sh/).
 | [`secret-cli`](skills/secret-cli/SKILL.md) | Local macOS credentials and authenticator codes |
 | [`dewey-docs`](skills/dewey-docs/SKILL.md) | Dewey documentation and agent-readiness workflows |
 | [`fleet`](skills/fleet/SKILL.md) | Install and update Arach's published tools on every machine |
+| [`agent-digest`](skills/agent-digest/SKILL.md) | Small, searchable digests of Codex and Claude Code session logs |
 
 List the published skills without installing them:
 

@@ -35,7 +35,11 @@ Rules:
 | Talkie | `@talkie/cli` | `talkie` | `arach/talkie` (`talkie`) | Macs |
 | Dewey | `@arach/dewey` | `dewey` | `arach/arach` (`dewey-docs`) | where docs are built |
 | Vox | `@voxd/cli` | `vox` | none | Macs that speak |
-| Arach | none | none | `arach/arach` (`arach`, `writing`, `humanizer`, `secret-cli`, `fleet`) | all |
+| Arach | none | none | `arach/arach` (`arach`, `writing`, `humanizer`, `secret-cli`, `fleet`, `agent-digest`) | all |
+
+`agent-digest` is a skill with its script inside it: after installing the
+skill, link `~/.agents/skills/agent-digest/agent-digest.ts` to
+`~/.local/bin/agent-digest`. It needs Bun.
 
 fab isn't published yet: its CLI (`fab/cli`) is private and has no skill. Run it
 from a checkout until a package exists.
