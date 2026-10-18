@@ -1,7 +1,7 @@
 ---
 standard: Arach Technical English
 short_name: ATE
-version: 2026.1
+version: 2026.2
 status: living
 published: 2026-07-27
 ---
@@ -175,6 +175,16 @@ Describe the invalid or unavailable state. Do not write `You failed to` or
 **ATE-043: Keep an error proportional to its consequence.**
 
 Do not use urgent or destructive language for a recoverable local problem.
+
+**ATE-044: Lead with the capability, then the condition.**
+
+Help, permission, and onboarding text starts with what the reader can do and
+the step that enables it. Limits, exceptions, and opt-outs follow. Do not open
+with `Only if`, `Not unless`, or `You can't` when the same fact can be stated
+as an enabling step.
+
+Example: `Grok Bot can use your Mac once you turn on Execution on this computer.
+It asks before installing anything.` Not: `Only if you allow it.`
 
 ### Style
 

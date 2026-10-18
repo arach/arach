@@ -1,6 +1,6 @@
 ---
 name: writing
-version: 1.1.0
+version: 1.2.0
 description: |
   Write and edit in Arach's preferred voice. Route technical documentation,
   procedures, implementation briefs, acceptance criteria, and product help
@@ -35,6 +35,9 @@ directly. Do not describe Arach Technical English as ASD-STE100 compliant.
 ## Baseline rules
 
 - Lead with the outcome or main claim.
+- Lead with what works and how to make it work, not with the exception. Write
+  `Grok Bot can use your Mac once you turn on Execution on this computer`, not
+  `Only if you allow it`. Put limits and conditions after the enabling sentence.
 - Use concrete subjects and verbs.
 - Keep one important idea in each sentence.
 - Prefer exact names, numbers, paths, states, and error conditions.
