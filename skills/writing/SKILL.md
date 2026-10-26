@@ -1,6 +1,6 @@
 ---
 name: writing
-version: 1.2.0
+version: 1.2.1
 description: |
   Write and edit in Arach's preferred voice. Route technical documentation,
   procedures, implementation briefs, acceptance criteria, and product help
@@ -31,6 +31,11 @@ Before drafting, classify the text:
 
 If the user asks for strict compliance with another standard, use that standard
 directly. Do not describe Arach Technical English as ASD-STE100 compliant.
+
+For substantive nonfiction or a requested Zinsser edit, use `on-writing-well`
+when installed. It supplies editorial guidance on structure, development, and
+revision. In mixed documents, apply it to the surrounding explanation while
+preserving the technical contract and its applicable standard.
 
 ## Baseline rules
 
