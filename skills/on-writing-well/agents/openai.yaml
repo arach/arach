@@ -1,0 +1,4 @@
+interface:
+  display_name: "On Writing Well"
+  short_description: "Clear, human nonfiction grounded in William Zinsser"
+  default_prompt: "Use $on-writing-well to draft or revise this nonfiction while preserving its facts and my voice."

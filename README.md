@@ -10,6 +10,7 @@ Code, and other agents supported by the [Skills CLI](https://skills.sh/).
 | --- | --- |
 | [`arach`](skills/arach/SKILL.md) | Personal project context, conventions, and workflow routing |
 | [`writing`](skills/writing/SKILL.md) | Arach's technical, editorial, and mixed writing system |
+| [`on-writing-well`](skills/on-writing-well/SKILL.md) | Draft and revise nonfiction with Zinsser's clarity, simplicity, brevity, and humanity |
 | [`humanizer`](skills/humanizer/SKILL.md) | Anti-AI-pattern diagnosis and prose reconstruction |
 | [`secret-cli`](skills/secret-cli/SKILL.md) | Local macOS credentials and authenticator codes |
 | [`dewey-docs`](skills/dewey-docs/SKILL.md) | Dewey documentation and agent-readiness workflows |
@@ -33,11 +34,21 @@ Install a selected set:
 
 ```bash
 npx skills add arach/arach \
-  --skill arach writing \
+  --skill arach writing on-writing-well \
   --agent '*' \
   --global \
   --yes
 ```
+
+Install just the Zinsser writing guide:
+
+```bash
+npx skills add arach/arach --skill on-writing-well --agent '*' --global --yes
+```
+
+The guide includes original instructions, editing examples, and concise source
+notes. It works without access to the source book, audiobook, or private
+transcription; those materials are not included in the package.
 
 Update globally installed skills from their recorded GitHub sources:
 

@@ -50,21 +50,24 @@ CLI (`~/.local/bin/secret`).
 
 ## Bundled skill routing
 
-This GitHub repository contains seven installable skills:
+This GitHub repository contains eight installable skills:
 
 | Skill | Use it for |
 | --- | --- |
 | `arach` | Personal project context, conventions, and workflow routing |
 | `writing` | Arach's technical, editorial, and mixed writing modes |
+| `on-writing-well` | Zinsser-informed nonfiction drafting and revision |
 | `humanizer` | An explicit anti-AI-pattern audit or generic prose cleanup |
 | `dewey-docs` | Dewey documentation setup and agent-ready documentation work |
 | `secret-cli` | Local macOS credentials and authenticator codes through `secret` |
 | `fleet` | Installing and updating Arach's published tools across his machines |
 | `agent-digest` | Digesting and searching past Codex and Claude Code sessions |
 
-Use `writing` for text written in Arach's voice. Use `humanizer` as an optional
-final audit when the user explicitly wants de-slopping or AI-pattern removal.
-The writing mode and factual contract remain authoritative.
+Use `writing` for text written in Arach's voice. For substantive nonfiction or
+a requested Zinsser edit, use `on-writing-well` for structure, development, and
+revision. Use `humanizer` as an optional final audit when the user explicitly
+wants de-slopping or AI-pattern removal. The writing mode and factual contract
+remain authoritative.
 
 The bundled `dewey-docs` skill is a convenience copy. Verify product behavior
 against the active `arach/dewey` checkout or published Dewey documentation when
@@ -139,10 +142,10 @@ CLI on the current operating-system account:
 npx skills add arach/arach --all --global
 ```
 
-Install only the personal router and writing system:
+Install the personal router and writing guides:
 
 ```bash
-npx skills add arach/arach --skill arach writing --agent '*' --global --yes
+npx skills add arach/arach --skill arach writing on-writing-well --agent '*' --global --yes
 ```
 
 List the skills without installing them:
