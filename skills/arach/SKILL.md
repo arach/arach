@@ -50,7 +50,7 @@ CLI (`~/.local/bin/secret`).
 
 ## Bundled skill routing
 
-This GitHub repository contains eight installable skills:
+This GitHub repository contains these installable skills:
 
 | Skill | Use it for |
 | --- | --- |
@@ -62,6 +62,7 @@ This GitHub repository contains eight installable skills:
 | `secret-cli` | Local macOS credentials and authenticator codes through `secret` |
 | `fleet` | Installing and updating Arach's published tools across his machines |
 | `agent-digest` | Digesting and searching past Codex and Claude Code sessions |
+| `dossier` | Investigating companies and founders, early customers, and changes in the public story |
 
 Use `writing` for text written in Arach's voice. For substantive nonfiction or
 a requested Zinsser edit, use `on-writing-well` for structure, development, and

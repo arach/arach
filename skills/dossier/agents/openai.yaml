@@ -1,0 +1,4 @@
+interface:
+  display_name: "Startup Dossier"
+  short_description: "Research company origins, customers and evidence"
+  default_prompt: "Use $dossier to investigate this startup, reconstruct its history and positioning, and trace its first customers and design partners."
