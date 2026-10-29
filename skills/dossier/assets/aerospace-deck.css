@@ -1,0 +1,9 @@
+/* Optional companion skin for the Scout deck kit; preserves slide geometry. */
+.dk{--ink:#141b26;--surface:#fff;--rule:#c3c9cf;--faint:#465266;--dim:#153954;--acc:#153954;color:#141b26}
+.dk .sl{border-radius:0;border-top:4px solid #b23328;background:#fff}
+.dk .no,.dk .ey,.dk .k{color:#465266;letter-spacing:.08em}
+.dk .so .k{color:#b23328}
+.dk h2 em,.dk .big em{color:#141b26}
+.dk th{color:#153954;border-bottom-color:#153954}
+.dk .cd{border-radius:0}
+.dk .pill.on{border-color:#153954;background:#eef1f3}

@@ -16,6 +16,7 @@ Code, and other agents supported by the [Skills CLI](https://skills.sh/).
 | [`dewey-docs`](skills/dewey-docs/SKILL.md) | Dewey documentation and agent-readiness workflows |
 | [`fleet`](skills/fleet/SKILL.md) | Install and update Arach's published tools on every machine |
 | [`agent-digest`](skills/agent-digest/SKILL.md) | Small, searchable digests of Codex and Claude Code session logs |
+| [`dossier`](skills/dossier/SKILL.md) | Evidence-linked startup and founder research, company history, first customers and changing positioning |
 
 List the published skills without installing them:
 
